@@ -1,5 +1,6 @@
 package up_backoffice;
 import model.DataEvento;
+import model.FotoTipo;
 public class AppTeste {
 
 	public static void main(String[] args) throws Exception {
@@ -9,7 +10,7 @@ public class AppTeste {
 //		var foto = EventoTest.getCapa(3, "","");
 		
 	//	EventoTest.getCapa(2,"100","100");		
-		EventoTest.getCapa(0,"D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Imoveis\\Comercial1\\1.jpg"  ,"100");		
+		EventoTest.getCapa(FotoTipo.Veiculo,"D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Imoveis\\Comercial1\\1.jpg"  ,"100");		
 //		EventoTest.getCapa(0,"D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Veiculos\\AUDI R8 SPYDER 2012\\175201825240230.jpg","100");	
 		
 

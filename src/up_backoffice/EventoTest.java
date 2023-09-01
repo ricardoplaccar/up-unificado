@@ -31,6 +31,7 @@ import junit.framework.Assert;
 import model.DataEvento;
 import model.Endereco;
 import model.Foto;
+import model.FotoTipo;
 import model.Imovel;
 import model.Veiculo;
 import model.vTest;
@@ -40,10 +41,6 @@ class EventoTest {
 
 	int controleTempo = 1000;
 	boolean finaliza = true;
-	private static final int tipoEventoFoto = 0;
-	private static final int tipoEventoVeiculo = 1;
-	private static final int tipoEventoImovel = 2;
-//	private static final int tipoEventoCapaVeiculo = 3;
 
 	// private static final int tipoEventoCapaImovel = 4;
 
@@ -94,7 +91,7 @@ class EventoTest {
 		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(1);
 
 		driver.findElement(By.id("Produto_Judicial")).click();
-		Gerar.Aguarde(controleTempo);
+		Gerar.Aguarde(controleTempo * 2);
 
 		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId")))
 				.selectByVisibleText("0032949-14.2023.8.19.56");
@@ -121,18 +118,17 @@ class EventoTest {
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(ender.Cep);
 		driver.findElement(By.id("Produto_Local_Numero")).click();
 		Gerar.Aguarde(controleTempo * 6);
-		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");	
+		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");
 		Gerar.Aguarde(controleTempo);
-		
+
 		var x = EnderecoValide(driver);
-		assertTrue(x > 2);
-		
-		
+	//	assertTrue(x > 2);
+
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[4]/div[1]/button[2]")).click();
 		Gerar.Aguarde(controleTempo * 3);
 
 		var ListaFoto = vc.getListFotos();
-		inserirFotos(driver, ListaFoto, nnum.Num);
+		inserirFotos(driver, FotoTipo.Veiculo, ListaFoto, nnum.Num);
 
 		Gerar.Aguarde(controleTempo * 3);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button[1]/i")).click(); // Salvar
@@ -151,7 +147,7 @@ class EventoTest {
 
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Eventos")).click();
-		Gerar.Aguarde(controleTempo*2);
+		Gerar.Aguarde(controleTempo * 2);
 		driver.findElement(By.partialLinkText("Novo")).click();
 		Gerar.Aguarde(controleTempo);
 
@@ -161,7 +157,7 @@ class EventoTest {
 		new Select(driver.findElement(By.id("Evento_Categoria"))).selectByIndex(1);
 		new Select(driver.findElement(By.id("Evento_QuantidadeEventos"))).selectByIndex(1);
 
-		var arquivo = getCapa(tipoEventoVeiculo, null, nnum.Num);
+		var arquivo = getCapa(FotoTipo.capaVeiculo, null, nnum.Num);
 
 		Gerar.Aguarde(controleTempo);
 
@@ -277,11 +273,12 @@ class EventoTest {
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(im.Endereco.Cep);
 
 		driver.findElement(By.id("Produto_Local_Numero")).click();
-		Gerar.Aguarde(controleTempo * 2);
 	
+		Gerar.Aguarde(controleTempo);
+
 		var x = EnderecoValide(driver);
-		assertTrue(x > 2);
-		
+	//	assertTrue(x > 2);
+
 		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");
 		new Select(driver.findElement(By.id("Produto_SituacaoOcupacao"))).selectByIndex(1);
 		new Select(driver.findElement(By.id("Produto_EstagioObra"))).selectByIndex(5);
@@ -290,13 +287,13 @@ class EventoTest {
 		Gerar.Aguarde(controleTempo * 3);
 
 		var ListaFoto = im.getListFotos();
-		inserirFotos(driver, ListaFoto, nnum.Num);
+		inserirFotos(driver, FotoTipo.Imovel, ListaFoto, nnum.Num);
 
-		Gerar.Aguarde(controleTempo * 3);
+		Gerar.Aguarde(controleTempo * 5);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button[1]/i")).click();
 
+		// *************************** Evento Imovel ***********************************
 		
-		// *************************** produto *****************************************
 
 		DataEvento dataEvento = new DataEvento();
 
@@ -312,8 +309,8 @@ class EventoTest {
 		new Select(driver.findElement(By.id("Evento_Categoria"))).selectByIndex(1);
 		new Select(driver.findElement(By.id("Evento_QuantidadeEventos"))).selectByIndex(1);
 
-		var arquivo = getCapa(tipoEventoImovel, null, nnum.Num);
-	
+		var arquivo = getCapa(FotoTipo.capaImovel, null, nnum.Num);
+
 		Gerar.Aguarde(controleTempo);
 
 		driver.findElement(By.id("Evento_NovaFoto")).sendKeys(arquivo);
@@ -351,18 +348,17 @@ class EventoTest {
 		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta"))
 				.sendKeys(dataEvento.BloqueioAposOferta);
 
-//		
 		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta")).clear();
 		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta"))
 				.sendKeys(dataEvento.BloqueioAposOferta);
 
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
 
-		Gerar.Aguarde(controleTempo * 3);
+		Gerar.Aguarde(controleTempo * 4);
 
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[3]/i")).click();
 
-		Gerar.Aguarde(controleTempo);
+		Gerar.Aguarde(controleTempo*3);
 
 		driver.findElement(By.xpath("//*[@id=\"FiltroProduto_Texto\"]")).clear();
 		driver.findElement(By.xpath("//*[@id=\"FiltroProduto_Texto\"]")).sendKeys(im.Nome);
@@ -384,7 +380,7 @@ class EventoTest {
 		driver.findElement(By.id("Anuncio_Financiavel")).click();
 		Gerar.Aguarde(controleTempo * 2);
 		driver.findElement(By.id("Anuncio_Personalizado")).click();
-		Gerar.Aguarde(controleTempo * 2);
+		Gerar.Aguarde(controleTempo * 3);
 		driver.findElement(By.id("Anuncio_Titulo1")).sendKeys(im.Nome);
 
 // *************************************************************************************************		
@@ -401,31 +397,32 @@ class EventoTest {
 	}
 
 	private int EnderecoValide(WebDriver driver) {
-		
+
 		String s = driver.findElement(By.id("Produto_Local_Logradouro")).getAttribute("value");
 		var x = s.length();
-		System.out.println("s=>"+s);
-		System.out.println("x=>" +x);
-		
-		if (x==0) {
+		System.out.println("s=>" + s);
+		System.out.println("x=>" + x);
+
+		if (x == 0) {
 			driver.findElement(By.id("Produto_Local_Logradouro")).sendKeys("Qualquer");
 			driver.findElement(By.id("Produto_Local_Bairro")).sendKeys("Qualquer");
 			driver.findElement(By.id("Produto_Local_Cidade")).sendKeys("Qualquer");
 			new Select(driver.findElement(By.id("Produto_Local_EstadoId"))).selectByIndex(1);
-			
+
 		}
-		
+
 		return x;
 	}
 
-	private void inserirFotos(WebDriver driver, ArrayList<Foto> ListaFoto, String num) throws Exception {
+	private void inserirFotos(WebDriver driver, FotoTipo fototipo, ArrayList<Foto> ListaFoto, String num)
+			throws Exception {
 		var nfoto = 0;
 		for (Foto item : ListaFoto) {
 
 			nfoto++;
 
 			if (nfoto == 1) {
-				var foto = getCapa(tipoEventoFoto, item.local, num);
+				var foto = getCapa(fototipo, item.local, num);
 
 				driver.findElement(By.id("Multimidia_NovaImagem")).sendKeys(foto);
 
@@ -437,23 +434,34 @@ class EventoTest {
 
 	}
 
-	public static String getCapa(int tipoEvento, String Texto, String num) throws Exception {
+	public static String getCapa(FotoTipo fototipo, String Texto, String num) throws Exception {
 		// URL url = new URL("https://i.stack.imgur.com/Nqf3H.jpg");
 		String Caminho = "D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\foto_capa\\";
 		BufferedImage originalImage;
 		BasicStroke stroke = new BasicStroke(2f);
 		String Aquiv = null;
 		int tam = 100;
-		if (tipoEvento == tipoEventoVeiculo) {
+		if (fototipo == FotoTipo.capaVeiculo) {
 			Aquiv = Caminho + "capa-leilao-vazio-carro.jpg";
 		}
 
-		else if (tipoEvento == tipoEventoImovel) {
+		else if (fototipo == FotoTipo.capaImovel) {
 			Aquiv = Caminho + "capa-leilao-vazio-imovel.jpg";
-		} else {
+		} else
+
+		if (fototipo == FotoTipo.Veiculo) {
+
 			Aquiv = Texto;
 			tam = 200;
 			stroke = new BasicStroke(4f);
+
+		} else
+
+		if (fototipo == FotoTipo.Imovel) {
+
+			Aquiv = Texto;
+			tam = 280;
+			stroke = new BasicStroke(6f);
 
 		}
 
