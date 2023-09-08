@@ -37,6 +37,7 @@ public class AppTeste {
 // este.Gravar(este.arquivo, 400);
 
 	System.out.println("num_test=>" + este.test_num);
+	System.out.println("lote=>" + este.lote);
 		
 		
 	}

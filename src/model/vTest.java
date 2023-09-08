@@ -13,11 +13,10 @@ import com.github.cliftonlabs.json_simple.Jsoner;
 public class vTest {
 	public String Desc;
 	public String Num;
-	public int quantidade=1;
+	public int quantidade = 1;
 	public int proximo;
-	public int lote=1;
-	public int loteMax=1;
-	public int quantidadeMax=1;
+	public int lote = 1;
+	public int quantidadeMax = 2;
 	public int test_num;
 	private final String arquivo = "d:\\teste.json.txt";
 
@@ -25,32 +24,27 @@ public class vTest {
 		Leia();
 
 		Update();
-		
+
 	}
+
 	public void Update() {
-		
+
 		this.test_num++;
-		
-		
-		this.lote++;
-		
-		
-		this.proximo++;
-		
+		if ((quantidadeMax-1) >= quantidade) {
+			this.lote++;
+			this.proximo++;
+
+		}
+
 		Gravar();
-	
-		
-		
-		
+
 	}
-	
-	private int GetInt(Object  value) {
-	return  ((BigDecimal) value).intValue();	
-	
-		
-		
+
+	private int GetInt(Object value) {
+		return ((BigDecimal) value).intValue();
+
 	}
-	
+
 	private void Leia() {
 		try {
 
@@ -58,15 +52,13 @@ public class vTest {
 
 			JsonObject teste = (JsonObject) Jsoner.deserialize(reader);
 			JsonObject produto = (JsonObject) teste.get("TEST_UP");
-			
-			quantidade = GetInt(produto.get("quantidade"));
-			proximo =  GetInt(produto.get("proximo"));
-			lote= GetInt( produto.get("lote"));
-			loteMax = GetInt(produto.get("lotemax"));
-			quantidadeMax =GetInt(produto.get("quantidadeMax"));
-			test_num =  GetInt(produto.get("test_num"));
-			
 
+			quantidade = GetInt(produto.get("quantidade"));
+			proximo = GetInt(produto.get("proximo"));
+			lote = GetInt(produto.get("lote"));
+			quantidadeMax = GetInt(produto.get("quantidadeMax"));
+			test_num = GetInt(produto.get("test_num"));
+			Num = String.valueOf(test_num);
 			reader.close();
 
 		} catch (Exception ex) {
@@ -84,8 +76,7 @@ public class vTest {
 			JsonObject produto = new JsonObject();
 			produto.put("quantidade", quantidade);
 			produto.put("proximo", proximo);
-			produto.put("lote",lote);
-			produto.put("lotemax", loteMax);
+			produto.put("lote", lote);
 			produto.put("quantidadeMax", quantidadeMax);
 			produto.put("test_num", test_num);
 
