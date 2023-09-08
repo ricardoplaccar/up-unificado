@@ -1,74 +1,101 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 
 public class vTest {
 	public String Desc;
 	public String Num;
+	public int quantidade=1;
+	public int proximo;
+	public int lote=1;
+	public int loteMax=1;
+	public int quantidadeMax=1;
+	public int test_num;
+	private final String arquivo = "d:\\teste.json.txt";
 
 	public vTest() {
+		Leia();
 
-		var arquivo = "d://Up_Test.txt";
-
-		var numero = 0;
-
-		Path path = Paths.get(arquivo);
-		if (Files.notExists(path)) {
-			Grave(arquivo, "0");
-			Num = Integer.toString(numero);
-
-		}
-		if (Files.exists(path)) {
-
-			var dado = Leia(arquivo);
-
-			try {
-				numero = Integer.parseInt(dado);
-			} catch (NumberFormatException e) {
-				numero = 1;
-			}
-
-			numero++;
-			Grave(arquivo, Integer.toString(numero));
-			Desc = " - Test(" + numero + ")";
-			Num = Integer.toString(numero);
-
-		}
+		Update();
+		
 	}
-
-	private String Leia(String arquivo) {
-		String line = "";
-
+	public void Update() {
+		
+		this.test_num++;
+		
+		
+		this.lote++;
+		
+		
+		this.proximo++;
+		
+		Gravar();
+	
+		
+		
+		
+	}
+	
+	private int GetInt(Object  value) {
+	return  ((BigDecimal) value).intValue();	
+	
+		
+		
+	}
+	
+	private void Leia() {
 		try {
-			FileReader reader = new FileReader(arquivo);
-			BufferedReader bufferedReader = new BufferedReader(reader);
-			line = bufferedReader.readLine();
+
+			Reader reader = Files.newBufferedReader(Paths.get(arquivo));
+
+			JsonObject teste = (JsonObject) Jsoner.deserialize(reader);
+			JsonObject produto = (JsonObject) teste.get("TEST_UP");
+			
+			quantidade = GetInt(produto.get("quantidade"));
+			proximo =  GetInt(produto.get("proximo"));
+			lote= GetInt( produto.get("lote"));
+			loteMax = GetInt(produto.get("lotemax"));
+			quantidadeMax =GetInt(produto.get("quantidadeMax"));
+			test_num =  GetInt(produto.get("test_num"));
+			
+
 			reader.close();
 
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-		return line;
 
 	}
 
-	private void Grave(String arquivo, String Dado) {
-
+	private void Gravar() {
 		try {
-			FileWriter writer = new FileWriter(arquivo, false);
-			writer.write(Dado);
-			writer.write("\r\n"); // write new line
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
+			// create a writer
+			BufferedWriter arquivoJson = Files.newBufferedWriter(Paths.get(arquivo));
+			JsonObject teste = new JsonObject();
+			JsonObject produto = new JsonObject();
+			produto.put("quantidade", quantidade);
+			produto.put("proximo", proximo);
+			produto.put("lote",lote);
+			produto.put("lotemax", loteMax);
+			produto.put("quantidadeMax", quantidadeMax);
+			produto.put("test_num", test_num);
+
+			teste.put("TEST_UP", produto);
+			Jsoner.serialize(teste, arquivoJson);
+			arquivoJson.close();
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }
