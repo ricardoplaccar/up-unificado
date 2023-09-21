@@ -12,29 +12,27 @@ public class Categoria {
 
 	public Categoria() {
 	}
+/*
 
 	public Categoria(vTest nnum, String Categ, String Sub) {
 
 		Categoria = Categ;
 		SubCategoria = Sub;
-
 		if (nnum != null) {
 			Categoria += nnum.Desc;
 			SubCategoria += nnum.Desc;
 
 		}
-
-	}
-
 	
+	}
+*/
 	public Categoria(String Categ, String Sub) {
 
 		Categoria = Categ;
 		SubCategoria = Sub;
 
 	}
-	
-	
+
 	public Categoria(vTest nnum) {
 
 		// nnum = Gerar.getTest();

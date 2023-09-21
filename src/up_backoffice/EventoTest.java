@@ -82,7 +82,7 @@ class EventoTest {
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.id("Produto_Nome")).click();
 		driver.findElement(By.id("Produto_Nome")).sendKeys(vc.Nome);
-		Gerar.Aguarde(controleTempo);
+		Gerar.Aguarde(controleTempo*2);
 		new Select(driver.findElement(By.id("Produto_SubCategoriaCategoriaId"))).selectByVisibleText(vc.Categoria.Categoria);
 		Gerar.Aguarde(controleTempo);
 		new Select(driver.findElement(By.id("Produto_SubCategoriaId"))).selectByVisibleText(vc.Categoria.SubCategoria);
