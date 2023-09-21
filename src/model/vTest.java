@@ -13,15 +13,68 @@ import com.github.cliftonlabs.json_simple.Jsoner;
 public class vTest {
 	public String Desc;
 	public String Num;
-	public int quantidade = 1;
-	public int proximo;
-	public int lote = 1;
-	public int quantidadeMax = 2;
+	public int quantidade = 0;
+	private int LoteVeiculoMax = 5;
+	private int LoteImovelMax = 5;
+
+//	public int test_num= 471;
 	public int test_num;
+	private int LoteVeiculo;
+	private int LoteImovel;
+	private int Ocupacao;
+	public int OcupacaoMax = 4;
+	private int Estagio;
+	public int EstagioMax = 5;
+	private String versao = "1.5.61.5";
+	private String sistema = "Local_UP";
+	
+	public String getVersao() {
+		return versao;
+	}
+
+	public int getOcupacao() {
+		Ocupacao++;
+		if (Ocupacao > OcupacaoMax)
+			Ocupacao = 1;
+		Gravar();
+		return Ocupacao;
+	}
+
+	public int getEstagio() {
+		Estagio++;
+		if (Estagio > EstagioMax)
+			Estagio = 1;
+		Gravar();
+		return Estagio;
+	}
+
+	public int getLoteVeiculo() {
+		LoteVeiculo++;
+		if (LoteVeiculo > LoteVeiculoMax)
+			LoteVeiculo = 0;
+
+		Gravar();
+		return LoteVeiculo;
+	}
+
+	public int getLoteImovel() {
+
+		LoteImovel++;
+		if (LoteImovel > LoteImovelMax)
+			LoteImovel = 0;
+
+		Gravar();
+		return LoteImovel;
+	}
+
 	private final String arquivo = "d:\\teste.json.txt";
 
 	public vTest() {
+
+		// Gravar();
+
 		Leia();
+		Desc = " - Test(" + Num + ")";
 
 		Update();
 
@@ -30,11 +83,6 @@ public class vTest {
 	public void Update() {
 
 		this.test_num++;
-		if ((quantidadeMax-1) >= quantidade) {
-			this.lote++;
-			this.proximo++;
-
-		}
 
 		Gravar();
 
@@ -51,13 +99,21 @@ public class vTest {
 			Reader reader = Files.newBufferedReader(Paths.get(arquivo));
 
 			JsonObject teste = (JsonObject) Jsoner.deserialize(reader);
-			JsonObject produto = (JsonObject) teste.get("TEST_UP");
+			JsonObject produto = (JsonObject) teste.get(sistema);
 
 			quantidade = GetInt(produto.get("quantidade"));
-			proximo = GetInt(produto.get("proximo"));
-			lote = GetInt(produto.get("lote"));
-			quantidadeMax = GetInt(produto.get("quantidadeMax"));
+			LoteVeiculoMax = GetInt(produto.get("LoteVeiculoMax"));
+			LoteImovelMax = GetInt(produto.get("LoteImovelMax"));
+			LoteImovel = GetInt(produto.get("LoteImovel"));
+			LoteVeiculo = GetInt(produto.get("LoteVeiculo"));
+
+			Ocupacao = GetInt(produto.get("Ocupacao"));
+			OcupacaoMax = GetInt(produto.get("OcupacaoMax"));
+			Estagio = GetInt(produto.get("Estagio"));
+			EstagioMax = GetInt(produto.get("EstagioMax"));
+
 			test_num = GetInt(produto.get("test_num"));
+ versao = (String) produto.get("versao");
 			Num = String.valueOf(test_num);
 			reader.close();
 
@@ -75,12 +131,20 @@ public class vTest {
 			JsonObject teste = new JsonObject();
 			JsonObject produto = new JsonObject();
 			produto.put("quantidade", quantidade);
-			produto.put("proximo", proximo);
-			produto.put("lote", lote);
-			produto.put("quantidadeMax", quantidadeMax);
+			produto.put("LoteVeiculo", LoteVeiculo);
+			produto.put("LoteVeiculoMax", LoteVeiculoMax);
+			produto.put("LoteImovel", LoteImovel);
+			produto.put("LoteImovelMax", LoteImovelMax);
+
+			produto.put("Ocupacao", Ocupacao);
+			produto.put("OcupacaoMax", OcupacaoMax);
+			produto.put("Estagio", Estagio);
+			produto.put("EstagioMax", EstagioMax);
+			produto.put("versao",versao );
+	
 			produto.put("test_num", test_num);
 
-			teste.put("TEST_UP", produto);
+			teste.put(sistema, produto);
 			Jsoner.serialize(teste, arquivoJson);
 			arquivoJson.close();
 

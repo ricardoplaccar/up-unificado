@@ -26,6 +26,15 @@ public class Categoria {
 
 	}
 
+	
+	public Categoria(String Categ, String Sub) {
+
+		Categoria = Categ;
+		SubCategoria = Sub;
+
+	}
+	
+	
 	public Categoria(vTest nnum) {
 
 		// nnum = Gerar.getTest();

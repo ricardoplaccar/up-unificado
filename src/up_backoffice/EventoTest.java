@@ -73,6 +73,9 @@ class EventoTest {
 		vc = vc.GetVeiculo(nnum);
 		WebDriver driver = LoginTest.IniciaLogin();
 
+	//	String texto = driver.findElement(By.cssSelector("span.navbar-text.small")).getText();
+//		assertEquals(nnum.getVersao(), texto);
+
 		driver.findElement(By.linkText("Produtos")).click();
 		Gerar.Aguarde(controleTempo * 2);
 		driver.findElement(By.partialLinkText("Novo")).click();
@@ -80,9 +83,9 @@ class EventoTest {
 		driver.findElement(By.id("Produto_Nome")).click();
 		driver.findElement(By.id("Produto_Nome")).sendKeys(vc.Nome);
 		Gerar.Aguarde(controleTempo);
-		new Select(driver.findElement(By.id("Produto_SubCategoriaCategoriaId"))).selectByVisibleText("Veículos");
+		new Select(driver.findElement(By.id("Produto_SubCategoriaCategoriaId"))).selectByVisibleText(vc.Categoria.Categoria);
 		Gerar.Aguarde(controleTempo);
-		new Select(driver.findElement(By.id("Produto_SubCategoriaId"))).selectByVisibleText("Carro de Passeio");
+		new Select(driver.findElement(By.id("Produto_SubCategoriaId"))).selectByVisibleText(vc.Categoria.SubCategoria);
 		Gerar.Aguarde(controleTempo);
 
 		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(vc.Valor);
@@ -94,7 +97,7 @@ class EventoTest {
 		Gerar.Aguarde(controleTempo * 2);
 
 		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId")))
-				.selectByVisibleText("0032949-14.2023.8.19.56");
+				.selectByVisibleText("0032949-14.2023.8.19.5");
 
 		Gerar.Aguarde(controleTempo);
 
@@ -117,12 +120,12 @@ class EventoTest {
 
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(ender.Cep);
 		driver.findElement(By.id("Produto_Local_Numero")).click();
-		Gerar.Aguarde(controleTempo * 6);
+		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");
 		Gerar.Aguarde(controleTempo);
 
 		var x = EnderecoValide(driver);
-	//	assertTrue(x > 2);
+		// assertTrue(x > 2);
 
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[4]/div[1]/button[2]")).click();
 		Gerar.Aguarde(controleTempo * 3);
@@ -163,7 +166,7 @@ class EventoTest {
 
 		driver.findElement(By.id("Evento_NovaFoto")).sendKeys(arquivo);
 
-		Gerar.Aguarde(controleTempo * 2);
+		Gerar.Aguarde(controleTempo * 3);
 
 		new Select(driver.findElement(By.id("Evento_Tipo"))).selectByIndex(1);
 
@@ -171,9 +174,9 @@ class EventoTest {
 
 		PreencheData(driver, "Evento_InicioExbicaoEm", dataEvento.HoraExibir);
 		PreencheData(driver, "Evento_FimExbicaoEm", dataEvento.HoraFimExibir);
-
+       
 		new Select(driver.findElement(By.id("Evento_Configuracao_OpcaoDisputa"))).selectByIndex(2);
-		Gerar.Aguarde(controleTempo);
+		Gerar.Aguarde(controleTempo*2);
 		PreencheData(driver, "Evento_PrimeiroIniciaEm", dataEvento.InicioDisputaFake);
 		driver.findElement(By.id("Evento_Configuracao_DuracaoDisputa")).clear();
 		driver.findElement(By.id("Evento_Configuracao_DuracaoDisputa")).sendKeys(dataEvento.DuracaoDisputa);
@@ -233,6 +236,7 @@ class EventoTest {
 
 		Gerar.Aguarde(controleTempo * 2);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[1]/i")).click();
+		// nnum.Update();
 
 	}
 
@@ -243,6 +247,10 @@ class EventoTest {
 		im = im.GetImovel(nnum);
 
 		WebDriver driver = LoginTest.IniciaLogin();
+
+//		String texto = driver.findElement(By.cssSelector("span.navbar-text.small")).getText();
+
+	//	assertEquals(nnum.getVersao(), texto);
 
 		driver.findElement(By.linkText("Produtos")).click();
 		Gerar.Aguarde(controleTempo);
@@ -266,22 +274,24 @@ class EventoTest {
 		Gerar.Aguarde(controleTempo * 2);
 
 		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId")))
-				.selectByVisibleText("0032949-14.2023.8.19.56");
+				.selectByVisibleText("0032949-14.2023.8.19.5");
 
 		Gerar.Aguarde(controleTempo);
 
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(im.Endereco.Cep);
 
 		driver.findElement(By.id("Produto_Local_Numero")).click();
-	
-		Gerar.Aguarde(controleTempo);
+
+		Gerar.Aguarde(controleTempo*2);
 
 		var x = EnderecoValide(driver);
-	//	assertTrue(x > 2);
+		// assertTrue(x > 2);
 
 		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");
-		new Select(driver.findElement(By.id("Produto_SituacaoOcupacao"))).selectByIndex(1);
-		new Select(driver.findElement(By.id("Produto_EstagioObra"))).selectByIndex(5);
+		var situacao = nnum.getOcupacao();
+	 	new Select(driver.findElement(By.id("Produto_SituacaoOcupacao"))).selectByIndex(situacao);
+		var estagio = nnum.getEstagio();
+		new Select(driver.findElement(By.id("Produto_EstagioObra"))).selectByIndex(estagio);
 
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[4]/div[1]/button[2]")).click();
 		Gerar.Aguarde(controleTempo * 3);
@@ -292,8 +302,12 @@ class EventoTest {
 		Gerar.Aguarde(controleTempo * 5);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button[1]/i")).click();
 
-		// *************************** Evento Imovel ***********************************
+		Gerar.Aguarde(controleTempo * 3);
+	var	 texto = driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success")).getText();
+		assertEquals(LoginTest.salvocomsucesso, texto);
 		
+		
+		// *************************** Evento Imovel ***********************************
 
 		DataEvento dataEvento = new DataEvento();
 
@@ -315,7 +329,7 @@ class EventoTest {
 
 		driver.findElement(By.id("Evento_NovaFoto")).sendKeys(arquivo);
 
-		Gerar.Aguarde(controleTempo * 2);
+		Gerar.Aguarde(controleTempo * 3);
 
 		new Select(driver.findElement(By.id("Evento_Tipo"))).selectByIndex(1);
 
@@ -358,7 +372,7 @@ class EventoTest {
 
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[3]/i")).click();
 
-		Gerar.Aguarde(controleTempo*3);
+		Gerar.Aguarde(controleTempo * 4);
 
 		driver.findElement(By.xpath("//*[@id=\"FiltroProduto_Texto\"]")).clear();
 		driver.findElement(By.xpath("//*[@id=\"FiltroProduto_Texto\"]")).sendKeys(im.Nome);
@@ -393,6 +407,7 @@ class EventoTest {
 
 		PreencheData(driver, "Evento_PrimeiroIniciaEm", dataEvento.InicioDisputaReal);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button[1]")).click();
+		// nnum.Update();
 
 	}
 
@@ -400,14 +415,15 @@ class EventoTest {
 
 		String s = driver.findElement(By.id("Produto_Local_Logradouro")).getAttribute("value");
 		var x = s.length();
-		System.out.println("s=>" + s);
-		System.out.println("x=>" + x);
+//		System.out.println("s=>" + s);
+//		System.out.println("x=>" + x);
 
 		if (x == 0) {
 			driver.findElement(By.id("Produto_Local_Logradouro")).sendKeys("Qualquer");
 			driver.findElement(By.id("Produto_Local_Bairro")).sendKeys("Qualquer");
 			driver.findElement(By.id("Produto_Local_Cidade")).sendKeys("Qualquer");
 			new Select(driver.findElement(By.id("Produto_Local_EstadoId"))).selectByIndex(1);
+			System.out.println("Falou endereco=>" + nnum.Desc);
 
 		}
 
