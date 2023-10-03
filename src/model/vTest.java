@@ -14,8 +14,8 @@ public class vTest {
 	public String Desc;
 	public String Num;
 	public int quantidade = 0;
-	private int LoteVeiculoMax = 5;
-	private int LoteImovelMax = 5;
+	public int LoteVeiculoMax = 5;
+	public int LoteImovelMax = 5;
 
 //	public int test_num= 471;
 	public int test_num;
@@ -25,9 +25,21 @@ public class vTest {
 	public int OcupacaoMax = 4;
 	private int Estagio;
 	public int EstagioMax = 5;
+	private int Comitente = -1;
+	private int ComitenteMax = 10;
 	private String versao = "1.5.61.5";
 	private String sistema = "Local_UP";
-	
+	private final String arquivo = "d:\\Up_Local.json";
+
+	public int getComitente() {
+		Comitente++;
+		if (Comitente >= ComitenteMax)
+			Comitente = 0;
+		Gravar();
+
+		return Comitente;
+	}
+
 	public String getVersao() {
 		return versao;
 	}
@@ -67,8 +79,6 @@ public class vTest {
 		return LoteImovel;
 	}
 
-	private final String arquivo = "d:\\teste.json.txt";
-
 	public vTest() {
 
 		// Gravar();
@@ -106,6 +116,8 @@ public class vTest {
 			LoteImovelMax = GetInt(produto.get("LoteImovelMax"));
 			LoteImovel = GetInt(produto.get("LoteImovel"));
 			LoteVeiculo = GetInt(produto.get("LoteVeiculo"));
+			Comitente = GetInt(produto.get("Comitente"));
+			ComitenteMax = GetInt(produto.get("ComitenteMax"));
 
 			Ocupacao = GetInt(produto.get("Ocupacao"));
 			OcupacaoMax = GetInt(produto.get("OcupacaoMax"));
@@ -113,7 +125,7 @@ public class vTest {
 			EstagioMax = GetInt(produto.get("EstagioMax"));
 
 			test_num = GetInt(produto.get("test_num"));
- versao = (String) produto.get("versao");
+			versao = (String) produto.get("versao");
 			Num = String.valueOf(test_num);
 			reader.close();
 
@@ -135,13 +147,15 @@ public class vTest {
 			produto.put("LoteVeiculoMax", LoteVeiculoMax);
 			produto.put("LoteImovel", LoteImovel);
 			produto.put("LoteImovelMax", LoteImovelMax);
-
+			produto.put("Comitente", Comitente);
+			produto.put("ComitenteMax", ComitenteMax);
 			produto.put("Ocupacao", Ocupacao);
 			produto.put("OcupacaoMax", OcupacaoMax);
 			produto.put("Estagio", Estagio);
 			produto.put("EstagioMax", EstagioMax);
-			produto.put("versao",versao );
-	
+
+			produto.put("versao", versao);
+
 			produto.put("test_num", test_num);
 
 			teste.put(sistema, produto);

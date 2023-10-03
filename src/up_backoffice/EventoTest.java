@@ -28,6 +28,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import junit.framework.Assert;
+import model.Comitente;
 import model.DataEvento;
 import model.Endereco;
 import model.Foto;
@@ -40,12 +41,12 @@ import util.Gerar;
 class EventoTest {
 
 	int controleTempo = 1000;
-	boolean finaliza = true;
+	boolean finaliza = false;
 
 	// private static final int tipoEventoCapaImovel = 4;
 
 	public vTest nnum = new vTest();
-
+	 int ncomitente = nnum.getComitente();
 //
 
 	@BeforeAll
@@ -67,15 +68,46 @@ class EventoTest {
 
 	@Test
 	void CadastarEvento_Unico_Veiculo_Deve_Retornar_sucesso() throws Exception {
+	
+		ArrayList<Veiculo> ListaVeiculos =  new ArrayList<>();
+	
+		WebDriver driver = LoginTest.IniciaLogin();
+		for (var i = 0;i<2; i++) {
+		    var vc =  CadastrarVeiculo(driver);
+			 ListaVeiculos.add(vc);
+			}
+		
+		// *************************** Cadastra Eventos *****************************************
+		DataEvento dataEvento = new DataEvento();
+        CadastrarEvento(driver,dataEvento);
+		
+		// Selecionar produto
+		
+		Salvar(driver);		
+		// editar produto 
+		ListaVeiculos.forEach(vc ->  {
+	    EditarProduto(driver,vc.Nome );
+		var comitente = new Comitente(ncomitente);
+		driver.findElement(By.id("Anuncio_PrimeiroValorInicial")).sendKeys(vc.Valor);
+		driver.findElement(By.id("Anuncio_PrimeiroValorInicialDesconto")).sendKeys("50");
+		driver.findElement(By.id("Anuncio_ValorMinimo")).sendKeys(vc.Valor);	
+		driver.findElement(By.id("Anuncio_Incremento")).sendKeys("100000");	
+		driver.findElement(By.id("Anuncio_UriFinanciamentoExterno")).sendKeys(comitente.UrlFinaceira);	
+		driver.findElement(By.id("Anuncio_Parcelamento")).click();
+		driver.findElement(By.id("Anuncio_AVista")).click();
+		PreencheData(driver, "Anuncio_InicioDestaqueEm", dataEvento.HoraExibir);
+		Salvar(driver);
+		});
+		
+		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[1]")).click();
+		
+	}
 
-		// WebDriver driver = LoginTest.IniciaLogin();
+	private Veiculo CadastrarVeiculo(WebDriver driver) throws Exception {
+		
 		var vc = new Veiculo();
 		vc = vc.GetVeiculo(nnum);
-		WebDriver driver = LoginTest.IniciaLogin();
-
-	//	String texto = driver.findElement(By.cssSelector("span.navbar-text.small")).getText();
-//		assertEquals(nnum.getVersao(), texto);
-
+		
 		driver.findElement(By.linkText("Produtos")).click();
 		Gerar.Aguarde(controleTempo * 2);
 		driver.findElement(By.partialLinkText("Novo")).click();
@@ -84,38 +116,31 @@ class EventoTest {
 		driver.findElement(By.id("Produto_Nome")).sendKeys(vc.Nome);
 		Gerar.Aguarde(controleTempo*2);
 		new Select(driver.findElement(By.id("Produto_SubCategoriaCategoriaId"))).selectByVisibleText(vc.Categoria.Categoria);
-		Gerar.Aguarde(controleTempo);
+		Gerar.Aguarde(controleTempo);	
 		new Select(driver.findElement(By.id("Produto_SubCategoriaId"))).selectByVisibleText(vc.Categoria.SubCategoria);
 		Gerar.Aguarde(controleTempo);
-
+		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(ncomitente);
+		Gerar.Aguarde(controleTempo);
+		
 		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(vc.Valor);
 		driver.findElement(By.id("Produto_ValorAvaliacao")).sendKeys(vc.Valor);
-
-		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(1);
-
+		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(ncomitente);
 		driver.findElement(By.id("Produto_Judicial")).click();
 		Gerar.Aguarde(controleTempo * 2);
-
-		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId")))
-				.selectByVisibleText("0032949-14.2023.8.19.5");
-
-		Gerar.Aguarde(controleTempo);
-
+		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId"))).selectByVisibleText("0032949-14.2023.8.19.5");
+		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button")).sendKeys(vc.Nome); //Salvar
+		Gerar.Aguarde(controleTempo * 2);	
 		driver.findElement(By.id("Produto_Marca")).sendKeys(vc.Marca);
 		driver.findElement(By.id("Produto_Modelo")).sendKeys(vc.Modelo);
 		driver.findElement(By.id("Produto_Chassi")).sendKeys(vc.NumMotor);
 		driver.findElement(By.id("Produto_Renavam")).sendKeys("0112121212");
-
 		driver.findElement(By.id("Produto_AnoModelo")).sendKeys(vc.Ano);
 		driver.findElement(By.id("Produto_AnoFabricacao")).sendKeys(vc.Ano);
-
 		driver.findElement(By.id("Produto_PlacaNumero")).sendKeys(vc.Placa);
-
 		new Select(driver.findElement(By.id("Produto_PlacaEstadoId"))).selectByVisibleText("PR");
 
 		driver.findElement(By.id("Produto_Quilometragem")).sendKeys(vc.KM);
 		Gerar.Aguarde(controleTempo);
-
 		var ender = new Endereco();
 
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(ender.Cep);
@@ -124,9 +149,8 @@ class EventoTest {
 		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");
 		Gerar.Aguarde(controleTempo);
 
-		var x = EnderecoValide(driver);
-		// assertTrue(x > 2);
-
+		 EnderecoValide(driver);
+	
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[4]/div[1]/button[2]")).click();
 		Gerar.Aguarde(controleTempo * 3);
 
@@ -137,157 +161,153 @@ class EventoTest {
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button[1]/i")).click(); // Salvar
 		Gerar.Aguarde(controleTempo * 3);
 
-		assertEquals(
-				driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success")).getText(),
+		assertEquals(driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success")).getText(),
 				"Salvo com sucesso.");
+		return vc;
 
-//		Gerar.Aguarde(controleTempo);
-//		driver.findElement(By.cssSelector("button.btn.btn-primary")).click();// 
+	}
 
-		// *************************** produto *****************************************
-
-		DataEvento dataEvento = new DataEvento();
-
+	private void CadastrarEvento(WebDriver driver,DataEvento dataEvento ) throws Exception {
+	
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Eventos")).click();
 		Gerar.Aguarde(controleTempo * 2);
 		driver.findElement(By.partialLinkText("Novo")).click();
 		Gerar.Aguarde(controleTempo);
-
 		driver.findElement(By.id("Evento_Nome")).sendKeys(nnum.Num);
-
 		new Select(driver.findElement(By.id("Evento_CanalId"))).selectByIndex(1);
 		new Select(driver.findElement(By.id("Evento_Categoria"))).selectByIndex(1);
-		new Select(driver.findElement(By.id("Evento_QuantidadeEventos"))).selectByIndex(1);
-
-		var arquivo = getCapa(FotoTipo.capaVeiculo, null, nnum.Num);
-
 		Gerar.Aguarde(controleTempo);
-
+		driver.findElement(By.id("Evento_DescricaoGeral")).sendKeys("Venda de de Produtos");
+		new Select(driver.findElement(By.id("Evento_QuantidadeEventos"))).selectByIndex(1);
+		new Select(driver.findElement(By.id("Evento_FormaOferta"))).selectByIndex(1);
+		var arquivo = getCapa(FotoTipo.capaVeiculo, null, nnum.Num);
+		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.id("Evento_NovaFoto")).sendKeys(arquivo);
-
-		Gerar.Aguarde(controleTempo * 3);
-
+		Gerar.Aguarde(controleTempo * 4);
 		new Select(driver.findElement(By.id("Evento_Tipo"))).selectByIndex(1);
-
 		Gerar.Aguarde(controleTempo * 2);
-
 		PreencheData(driver, "Evento_InicioExbicaoEm", dataEvento.HoraExibir);
 		PreencheData(driver, "Evento_FimExbicaoEm", dataEvento.HoraFimExibir);
-       
-		new Select(driver.findElement(By.id("Evento_Configuracao_OpcaoDisputa"))).selectByIndex(2);
+		new Select(driver.findElement(By.id("Evento_Configuracao_OpcaoDisputa"))).selectByIndex(1);
 		Gerar.Aguarde(controleTempo*2);
-		PreencheData(driver, "Evento_PrimeiroIniciaEm", dataEvento.InicioDisputaFake);
-		driver.findElement(By.id("Evento_Configuracao_DuracaoDisputa")).clear();
-		driver.findElement(By.id("Evento_Configuracao_DuracaoDisputa")).sendKeys(dataEvento.DuracaoDisputa);
+		PreencheData(driver, "Evento_PrimeiroIniciaOuEncerraEm", dataEvento.InicioDisputaFake);
+		
+	}
 
-		driver.findElement(By.id("Evento_Configuracao_PermiteOfertasEmTodosAnunciosNaDisputa")).click();
-
-		driver.findElement(By.id("Evento_Configuracao_InicioAutomaticoDoTempo")).click();
+	private void EditarProduto(WebDriver driver,String value) {
+	   
 		Gerar.Aguarde(controleTempo);
-		driver.findElement(By.id("Evento_Configuracao_IntervaloAntesDisputa")).clear();
-		driver.findElement(By.id("Evento_Configuracao_IntervaloAntesDisputa")).sendKeys(dataEvento.Intervalo);
-
-		driver.findElement(By.id("Evento_Configuracao_BloqueiaDurateIntervalo")).click();
-		driver.findElement(By.id("Evento_Configuracao_PassagemAutomaticaAnuncios")).click();
+		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[3]")).click();
 		Gerar.Aguarde(controleTempo);
-		driver.findElement(By.id("Evento_Configuracao_IntervaloAposDisputa")).clear();
-		driver.findElement(By.id("Evento_Configuracao_IntervaloAposDisputa")).sendKeys(dataEvento.ItervaloPassagem);
-
-		driver.findElement(By.id("Evento_Configuracao_PodeCobrirPropriaOferta")).click();
-		Gerar.Aguarde(controleTempo);
-		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta"))
-				.sendKeys(dataEvento.BloqueioAposOferta);
-
-		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta")).clear();
-		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta"))
-				.sendKeys(dataEvento.BloqueioAposOferta);
-
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
-
-		Gerar.Aguarde(controleTempo * 3);
-
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[3]/i")).click();
-
-		Gerar.Aguarde(controleTempo * 2);
-
-		driver.findElement(By.xpath("//*[@id=\"FiltroProduto_Texto\"]")).clear();
-		driver.findElement(By.xpath("//*[@id=\"FiltroProduto_Texto\"]")).sendKeys(vc.Nome);
-
+		driver.findElement(By.id("FiltroProduto_Texto")).sendKeys(value);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/div/button")).click();
-
 		Gerar.Aguarde(controleTempo * 2);
-
 		driver.findElement(By.xpath("//*[@id=\"produtosTab\"]/div/div/table/tbody/tr/td[1]/a/span")).click();
-
 		Gerar.Aguarde(controleTempo * 2);
-
-		driver.findElement(By.id("Anuncio_ValorInicial")).sendKeys(vc.Valor);
-		driver.findElement(By.id("Anuncio_ValorMinimo")).sendKeys(vc.Valor);
-		driver.findElement(By.id("Anuncio_Incremento")).sendKeys("100000");
-
-		PreencheData(driver, "Anuncio_InicioDestaqueEm", dataEvento.HoraExibir);
-
-		driver.findElement(By.id("Anuncio_Financiavel")).click();
-		Gerar.Aguarde(controleTempo * 2);
-
-// *************************************************************************************************		
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button[1]")).click();
-
-		Gerar.Aguarde(controleTempo * 2);
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[1]/i")).click();
-		// nnum.Update();
-
+		
 	}
 
 	@Test
 	void CadastarEvento_Unico_Imovel_Deve_Retornar_sucesso() throws Exception {
 
-		var im = new Imovel();
-		im = im.GetImovel(nnum);
-
 		WebDriver driver = LoginTest.IniciaLogin();
-
-//		String texto = driver.findElement(By.cssSelector("span.navbar-text.small")).getText();
-
-	//	assertEquals(nnum.getVersao(), texto);
-
-		driver.findElement(By.linkText("Produtos")).click();
+		ArrayList<Imovel> ListaImoveis =  new ArrayList<>();
+		
+		for (var i = 0;i<3; i++) {
+		
+		var im =  CadastroImovel(driver);
+		ListaImoveis.add(im);
+		}
+	
+ 		// *************************** Evento Imovel ***********************************
+		DataEvento dataEvento = new DataEvento();
 		Gerar.Aguarde(controleTempo);
+		driver.findElement(By.partialLinkText("Eventos")).click();
+		Gerar.Aguarde(controleTempo * 3);
+		driver.findElement(By.partialLinkText("Novo")).click();
+		Gerar.Aguarde(controleTempo);
+
+		driver.findElement(By.id("Evento_Nome")).sendKeys(nnum.Num);
+		new Select(driver.findElement(By.id("Evento_ApresentadorId"))).selectByIndex(1);
+		new Select(driver.findElement(By.id("Evento_CanalId"))).selectByIndex(1);
+		new Select(driver.findElement(By.id("Evento_Categoria"))).selectByIndex(1);
+		Gerar.Aguarde(controleTempo*2);
+		new Select(driver.findElement(By.id("Evento_QuantidadeEventos"))).selectByIndex(1);
+		Gerar.Aguarde(controleTempo);
+		new Select(driver.findElement(By.id("Evento_FormaOferta"))).selectByIndex(1);
+		Gerar.Aguarde(controleTempo);
+		var arquivo = getCapa(FotoTipo.capaImovel, null, nnum.Num);
+		Gerar.Aguarde(controleTempo);
+		driver.findElement(By.id("Evento_NovaFoto")).sendKeys(arquivo);
+		Gerar.Aguarde(controleTempo * 3);
+		new Select(driver.findElement(By.id("Evento_Tipo"))).selectByIndex(1);
+		Gerar.Aguarde(controleTempo);
+		PreencheData(driver, "Evento_InicioExbicaoEm", dataEvento.HoraExibir);
+		PreencheData(driver, "Evento_FimExbicaoEm", dataEvento.HoraFimExibir);
+		new Select(driver.findElement(By.id("Evento_Configuracao_OpcaoDisputa"))).selectByIndex(1);
+		Gerar.Aguarde(controleTempo*3);
+		PreencheData(driver, "Evento_PrimeiroIniciaOuEncerraEm", dataEvento.InicioDisputaFake);
+		driver.findElement(By.id("Evento_Configuracao_PodeCobrirPropriaOferta")).click();
+		driver.findElement(By.id("Evento_Configuracao_PermiteOfertaAutomatica")).click();
+		Gerar.Aguarde(controleTempo);
+		Salvar(driver);	
+		// *************************** Evento Imovel ***********************************
+		
+		ListaImoveis.forEach(im ->  {
+		
+	EditarProduto(driver,im.Nome);
+		
+	var comitente = new Comitente(ncomitente);
+	
+	driver.findElement(By.id("Anuncio_PrimeiroValorInicial")).sendKeys(im.VlPedido);
+	driver.findElement(By.id("Anuncio_PrimeiroValorInicialDesconto")).sendKeys("50");
+	driver.findElement(By.id("Anuncio_ValorMinimo")).sendKeys(im.VlPedido);	
+	driver.findElement(By.id("Anuncio_Incremento")).sendKeys("100000");	
+	driver.findElement(By.id("Anuncio_UriFinanciamentoExterno")).sendKeys(comitente.UrlFinaceira);	
+	driver.findElement(By.id("Anuncio_Parcelamento")).click();
+	driver.findElement(By.id("Anuncio_AVista")).click();
+	
+	PreencheData(driver, "Anuncio_InicioDestaqueEm", dataEvento.HoraExibir);
+	
+	Salvar(driver);
+		});
+	}
+
+	private Imovel CadastroImovel(WebDriver driver) throws Exception {
+		var im = new Imovel();
+		 im = im.GetImovel(nnum);
+		
+		
+		driver.findElement(By.linkText("Produtos")).click();
+		Gerar.Aguarde(controleTempo * 2);
 		driver.findElement(By.partialLinkText("Novo")).click();
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.id("Produto_Nome")).click();
 		driver.findElement(By.id("Produto_Nome")).sendKeys(im.Nome);
+		Gerar.Aguarde(controleTempo*2);
+		new Select(driver.findElement(By.id("Produto_SubCategoriaCategoriaId"))).selectByVisibleText(im.Categoria.Categoria);
 		Gerar.Aguarde(controleTempo);
-		new Select(driver.findElement(By.id("Produto_SubCategoriaCategoriaId")))
-				.selectByVisibleText(im.Categoria.Categoria);
-		Gerar.Aguarde(controleTempo * 3);
 		new Select(driver.findElement(By.id("Produto_SubCategoriaId"))).selectByVisibleText(im.Categoria.SubCategoria);
 		Gerar.Aguarde(controleTempo);
-
 		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(im.VlPedido);
 		driver.findElement(By.id("Produto_ValorAvaliacao")).sendKeys(im.VlAvaliado);
-
-		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(1);
-		Gerar.Aguarde(controleTempo);
+		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(ncomitente);
 		driver.findElement(By.id("Produto_Judicial")).click();
 		Gerar.Aguarde(controleTempo * 2);
-
+		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId"))).selectByVisibleText("0032949-14.2023.8.19.5");
+		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button")).sendKeys(im.Nome); //Salvar
+		Gerar.Aguarde(controleTempo * 2);	
 		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId")))
 				.selectByVisibleText("0032949-14.2023.8.19.5");
 
 		Gerar.Aguarde(controleTempo);
-
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(im.Endereco.Cep);
-
 		driver.findElement(By.id("Produto_Local_Numero")).click();
-
-		Gerar.Aguarde(controleTempo*2);
-
-		var x = EnderecoValide(driver);
-		// assertTrue(x > 2);
-
+		Gerar.Aguarde(controleTempo);
+		EnderecoValide(driver);
 		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");
+	
 		var situacao = nnum.getOcupacao();
 	 	new Select(driver.findElement(By.id("Produto_SituacaoOcupacao"))).selectByIndex(situacao);
 		var estagio = nnum.getEstagio();
@@ -295,7 +315,6 @@ class EventoTest {
 
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[4]/div[1]/button[2]")).click();
 		Gerar.Aguarde(controleTempo * 3);
-
 		var ListaFoto = im.getListFotos();
 		inserirFotos(driver, FotoTipo.Imovel, ListaFoto, nnum.Num);
 
@@ -305,119 +324,15 @@ class EventoTest {
 		Gerar.Aguarde(controleTempo * 3);
 	var	 texto = driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success")).getText();
 		assertEquals(LoginTest.salvocomsucesso, texto);
+		return im;
 		
-		
-		// *************************** Evento Imovel ***********************************
-
-		DataEvento dataEvento = new DataEvento();
-
-		Gerar.Aguarde(controleTempo);
-		driver.findElement(By.partialLinkText("Eventos")).click();
-		Gerar.Aguarde(controleTempo * 3);
-		driver.findElement(By.partialLinkText("Novo")).click();
-		Gerar.Aguarde(controleTempo);
-
-		driver.findElement(By.id("Evento_Nome")).sendKeys(nnum.Num);
-
-		new Select(driver.findElement(By.id("Evento_CanalId"))).selectByIndex(1);
-		new Select(driver.findElement(By.id("Evento_Categoria"))).selectByIndex(1);
-		new Select(driver.findElement(By.id("Evento_QuantidadeEventos"))).selectByIndex(1);
-
-		var arquivo = getCapa(FotoTipo.capaImovel, null, nnum.Num);
-
-		Gerar.Aguarde(controleTempo);
-
-		driver.findElement(By.id("Evento_NovaFoto")).sendKeys(arquivo);
-
-		Gerar.Aguarde(controleTempo * 3);
-
-		new Select(driver.findElement(By.id("Evento_Tipo"))).selectByIndex(1);
-
-		Gerar.Aguarde(controleTempo);
-
-		PreencheData(driver, "Evento_InicioExbicaoEm", dataEvento.HoraExibir);
-		PreencheData(driver, "Evento_FimExbicaoEm", dataEvento.HoraFimExibir);
-
-		new Select(driver.findElement(By.id("Evento_Configuracao_OpcaoDisputa"))).selectByIndex(2);
-		Gerar.Aguarde(controleTempo);
-		PreencheData(driver, "Evento_PrimeiroIniciaEm", dataEvento.InicioDisputaFake);
-		driver.findElement(By.id("Evento_Configuracao_DuracaoDisputa")).clear();
-		driver.findElement(By.id("Evento_Configuracao_DuracaoDisputa")).sendKeys(dataEvento.DuracaoDisputa);
-
-		driver.findElement(By.id("Evento_Configuracao_PermiteOfertasEmTodosAnunciosNaDisputa")).click();
-
-		driver.findElement(By.id("Evento_Configuracao_InicioAutomaticoDoTempo")).click();
-		Gerar.Aguarde(controleTempo);
-		driver.findElement(By.id("Evento_Configuracao_IntervaloAntesDisputa")).clear();
-		driver.findElement(By.id("Evento_Configuracao_IntervaloAntesDisputa")).sendKeys(dataEvento.Intervalo);
-
-		driver.findElement(By.id("Evento_Configuracao_BloqueiaDurateIntervalo")).click();
-		driver.findElement(By.id("Evento_Configuracao_PassagemAutomaticaAnuncios")).click();
-		Gerar.Aguarde(controleTempo);
-		driver.findElement(By.id("Evento_Configuracao_IntervaloAposDisputa")).clear();
-		driver.findElement(By.id("Evento_Configuracao_IntervaloAposDisputa")).sendKeys(dataEvento.ItervaloPassagem);
-
-		driver.findElement(By.id("Evento_Configuracao_PodeCobrirPropriaOferta")).click();
-		Gerar.Aguarde(controleTempo);
-		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta"))
-				.sendKeys(dataEvento.BloqueioAposOferta);
-
-		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta")).clear();
-		driver.findElement(By.id("Evento_Configuracao_TempoBloqueioAposOferta"))
-				.sendKeys(dataEvento.BloqueioAposOferta);
-
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
-
-		Gerar.Aguarde(controleTempo * 4);
-
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[3]/i")).click();
-
-		Gerar.Aguarde(controleTempo * 4);
-
-		driver.findElement(By.xpath("//*[@id=\"FiltroProduto_Texto\"]")).clear();
-		driver.findElement(By.xpath("//*[@id=\"FiltroProduto_Texto\"]")).sendKeys(im.Nome);
-
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/div/button")).click();
-
-		Gerar.Aguarde(controleTempo * 2);
-
-		driver.findElement(By.xpath("//*[@id=\"produtosTab\"]/div/div/table/tbody/tr/td[1]/a/span")).click();
-
-		Gerar.Aguarde(controleTempo * 2);
-
-		driver.findElement(By.id("Anuncio_ValorInicial")).sendKeys(im.VlPedido);
-		driver.findElement(By.id("Anuncio_ValorMinimo")).sendKeys(im.VlPedido);
-		driver.findElement(By.id("Anuncio_Incremento")).sendKeys("100000");
-
-		PreencheData(driver, "Anuncio_InicioDestaqueEm", dataEvento.HoraExibir);
-
-		driver.findElement(By.id("Anuncio_Financiavel")).click();
-		Gerar.Aguarde(controleTempo * 2);
-		driver.findElement(By.id("Anuncio_Personalizado")).click();
-		Gerar.Aguarde(controleTempo * 3);
-		driver.findElement(By.id("Anuncio_Titulo1")).sendKeys(im.Nome);
-
-// *************************************************************************************************		
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button[1]")).click();
-
-		Gerar.Aguarde(controleTempo * 3);
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[13]/div[1]/button[1]/i")).click();
-		Gerar.Aguarde(controleTempo * 2);
-		// Ajusta hora disputa
-
-		PreencheData(driver, "Evento_PrimeiroIniciaEm", dataEvento.InicioDisputaReal);
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button[1]")).click();
-		// nnum.Update();
-
 	}
 
-	private int EnderecoValide(WebDriver driver) {
-
+	private void EnderecoValide(WebDriver driver) {
+		
+		Gerar.Aguarde(controleTempo * 2);
 		String s = driver.findElement(By.id("Produto_Local_Logradouro")).getAttribute("value");
 		var x = s.length();
-//		System.out.println("s=>" + s);
-//		System.out.println("x=>" + x);
-
 		if (x == 0) {
 			driver.findElement(By.id("Produto_Local_Logradouro")).sendKeys("Qualquer");
 			driver.findElement(By.id("Produto_Local_Bairro")).sendKeys("Qualquer");
@@ -427,7 +342,7 @@ class EventoTest {
 
 		}
 
-		return x;
+	
 	}
 
 	private void inserirFotos(WebDriver driver, FotoTipo fototipo, ArrayList<Foto> ListaFoto, String num)
@@ -450,9 +365,9 @@ class EventoTest {
 
 	}
 
-	public static String getCapa(FotoTipo fototipo, String Texto, String num) throws Exception {
+	private  String getCapa(FotoTipo fototipo, String Texto, String num) throws Exception {
 		// URL url = new URL("https://i.stack.imgur.com/Nqf3H.jpg");
-		String Caminho = "D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\foto_capa\\";
+		String Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\foto_capa\\";
 		BufferedImage originalImage;
 		BasicStroke stroke = new BasicStroke(2f);
 		String Aquiv = null;
@@ -486,9 +401,7 @@ class EventoTest {
 		final BufferedImage textImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
 		// Gerar Imagem de Texto
-
 		Graphics2D g = textImage.createGraphics();
-
 		FontRenderContext frc = g.getFontRenderContext();
 		Font font;
 		GlyphVector gv;
@@ -535,5 +448,13 @@ class EventoTest {
 		}
 
 	}
+private void Salvar(WebDriver driver) {
+	
+	driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
+	Gerar.Aguarde(controleTempo * 3);
 
+	
+	
+}
+	
 }

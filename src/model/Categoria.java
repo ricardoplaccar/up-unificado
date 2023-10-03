@@ -12,7 +12,7 @@ public class Categoria {
 
 	public Categoria() {
 	}
-/*
+
 
 	public Categoria(vTest nnum, String Categ, String Sub) {
 
@@ -25,7 +25,7 @@ public class Categoria {
 		}
 	
 	}
-*/
+
 	public Categoria(String Categ, String Sub) {
 
 		Categoria = Categ;

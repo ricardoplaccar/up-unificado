@@ -34,7 +34,6 @@ public class Veiculo {
 	
 	public Veiculo(Categoria categoria, String marca, String modelo, String ano, String combustivel, String cor, String km, String valor, String lance,String incremento, 
 			ArrayList<Foto> fotos, String placa,String nummotor,vTest nnum) {
-		
 		this.Categoria = categoria;
 		this.Marca = marca;
 		this.Modelo = modelo;
@@ -57,7 +56,7 @@ public class Veiculo {
 	
 //**************** Veículo 0 ***********************************************
 
-		String Caminho = "D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Veiculos\\AUDI R8 SPYDER 2012\\";
+		String Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\AUDI R8 SPYDER 2012\\";
 		ListaVeiculos.add(new Veiculo(new Categoria("Veículos", "Carro de Passeio" ) ,   "Audi", "R8 Spyder 5.2 Quattro R-tronic/S-tronic", "2012", "Flex", "Branca",
 				"16000", "62090000","600000","10000",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "175201825240230.jpg"),
@@ -69,14 +68,14 @@ public class Veiculo {
 		
 
 		// **************** Veículo 1 ***********************************************
-		Caminho = "D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Veiculos\\Bmw 740i E38\\";
+		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Bmw 740i E38\\";
 		ListaVeiculos.add(new Veiculo(new Categoria("Veículos", "Carro de Passeio" ),"Bmw", "740iA", "2000", "Flex", "Prata", "60000", "4400000","40000","5000",
 						new ArrayList<>(Arrays.asList(new Foto(Caminho + "480225110903533.jpg"),
 						new Foto(Caminho + "487217232145323.jpg"), new Foto(Caminho + "482288357665476.jpg"),
 						new Foto(Caminho + "488293358520695.jpg"))),"AAA-0002","15000",NNum));
 
 		// **************** Veículo 2 ***********************************************
-		Caminho = "D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Veiculos\\Chevette ( Tubarão ) 1976\\";
+		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Chevette ( Tubarão ) 1976\\";
 		ListaVeiculos.add(new Veiculo(new Categoria("Veículos", "Carro de Passeio" ),"Chevrolet", "Chevette L / SL / SL/e / DL / SE 1.6", "1993", "Gasolina", "Prata",
 				"20000", "2500000","20000","1000",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "959379852186266.jpg"),
@@ -87,7 +86,7 @@ public class Veiculo {
 				)),"AAA-0002","20000",NNum));
 
 		// **************** Veículo 3 ***********************************************
-		Caminho = "D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Veiculos\\Fiat Argo\\";
+		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Fiat Argo\\";
 		ListaVeiculos
 				.add(new Veiculo(new Categoria("Veículos", "Carro de Passeio" ),"Fiat", "AR DRIVE S-DESIGN 1.3 8V Flex", "2022", "Flex", "Prata", "10000", "5600000","50000","5000",
 						new ArrayList<>(Arrays.asList(new Foto(Caminho + "9.jpg"), new Foto(Caminho + "8.jpg"),
@@ -97,7 +96,7 @@ public class Veiculo {
 						)),"AAA-0003","3000",NNum));
 
 		// **************** Veículo 4 ***********************************************
-		Caminho = "D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Veiculos\\Fusca 1966\\";
+		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Fusca 1966\\";
 		ListaVeiculos.add(new Veiculo(new Categoria( "Veículos", "Carro de Passeio" ),"Volkswagen - VW", "Fusca", "1985", "Flex", "Vermelha", "500000", "2700000","20000","1500",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "962335254126182.jpg"),
 						new Foto(Caminho + "966308250603430.jpg"), new Foto(Caminho + "967356494102981.jpg"),
@@ -107,7 +106,7 @@ public class Veiculo {
 				)),"AAA-0004","4000",NNum));
 
 		// **************** Veículo 5 ***********************************************
-		Caminho = "D:\\ricsistemas\\Documents\\Placar\\Test\\fotos\\Veiculos\\Honda Civic\\";
+		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Honda Civic\\";
 		ListaVeiculos.add(new Veiculo(new Categoria("Veículos", "Carro de Passeio" ),"Honda", "Civic Coupe Si 2.4 16V 206cv Mec. 2p", "2015", "Flex", "Cinza Claro",
 				"10000", "14500000","140000","5000",				
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "831364482498496.jpg"),

@@ -1,13 +1,5 @@
 package up_backoffice;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
-
 import model.vTest;
 
 public class AppTeste {
@@ -34,6 +26,7 @@ public class AppTeste {
 
 		System.out.println("Estagio=>" + este.getEstagio());
 		System.out.println("Ocupação=>" + este.getOcupacao());
+		System.out.println("Comitente=>" + este.getComitente());
 
 		
 	}

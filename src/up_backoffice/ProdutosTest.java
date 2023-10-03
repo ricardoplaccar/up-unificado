@@ -81,11 +81,16 @@ class ProdutosTest {
 		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(1);
 			
 		driver.findElement(By.id("Produto_Judicial")).click();
-		Gerar.Aguarde(controleTempo);
+		Gerar.Aguarde(controleTempo*2);
 		
-		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId"))).selectByVisibleText("0032949-14.2023.8.19.56");
+		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId"))).selectByVisibleText("0032949-14.2023.8.19.5");
 		
 		Gerar.Aguarde(controleTempo);	
+		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button[1]")).click();// Salvar
+		
+		Gerar.Aguarde(controleTempo*2);	
+				
+		
 		
 		driver.findElement(By.id("Produto_Marca")).sendKeys(vc.Marca);
 		driver.findElement(By.id("Produto_Modelo")).sendKeys(vc.Modelo);
@@ -102,7 +107,7 @@ class ProdutosTest {
 		driver.findElement(By.id("Produto_Quilometragem")).sendKeys(vc.KM);
 		Gerar.Aguarde(controleTempo);
 		
-		var ender = new Endereco();
+		var ender = new Endereco(); //  gg
 
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(ender.Cep);
 
@@ -161,7 +166,6 @@ class ProdutosTest {
 		driver.findElement(By.id("Produto_Local_Numero")).click();
 		Gerar.Aguarde(controleTempo*2);
 		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");
-
 		
 
 		new Select(driver.findElement(By.id("Produto_SituacaoOcupacao"))).selectByIndex(1);

@@ -17,6 +17,7 @@ public static String url_site = "https://localhost:1476/conta/entrar?ReturnUrl=%
 
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("start-maximized");
+		
 		WebDriver driver = new ChromeDriver(options);
 
 		// driver.manage().timeouts().implicitlyWait(20, null);

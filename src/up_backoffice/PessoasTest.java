@@ -11,6 +11,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import model.Comitente;
 import model.Pessoa;
 import model.Pessoa.Tipo;
 import model.vTest;
@@ -19,8 +20,12 @@ import util.Gerar;
 public class PessoasTest {
 
 	private int controleTempo = 1000;
-	private boolean finaliza = true;
+	private boolean finaliza = false;
 	private vTest nnum = new vTest();
+	Comitente comitent = new Comitente(nnum.getComitente() );
+	
+	
+	
 	private WebDriver driver = LoginTest.IniciaLogin();
 
 	private synchronized void AddDos(final WebDriver driver) {
@@ -133,10 +138,10 @@ public class PessoasTest {
 	public void Cadastro_Fisica_Comitente_Deve_Retornar_Valido() throws IOException {
 		// Regra deve Salvar sem reclamar dos campos de endereços
 
-		var pes = new Pessoa(Tipo.Fisico);
+//		var pes = new Pessoa(Tipo.Fisico);
 
 		// var driver = Login.IniciaLogin();
-
+	
 		driver.findElement(By.linkText("Pessoas")).click();
 		Gerar.Aguarde(controleTempo);
 
@@ -153,8 +158,11 @@ public class PessoasTest {
 		Gerar.Aguarde(controleTempo);
 
 		driver.findElement(By.id("Pessoa_Nome")).click();
-		driver.findElement(By.id("Pessoa_Nome")).sendKeys(pes.Nome);
+		driver.findElement(By.id("Pessoa_Nome")).sendKeys(comitent.Nome);
 
+		driver.findElement(By.id("Pessoa_NovaImagem")).sendKeys(comitent.logo);
+		Gerar.Aguarde(controleTempo / 2);
+		
 		// driver.findElement(By.id("Pessoa_Apelido")).sendKeys(pes.Email.Apelido);
 
 		driver.findElement(By.id("Pessoa_Comitente")).click();
@@ -250,20 +258,7 @@ public class PessoasTest {
 		Gerar.Aguarde(1500);
 		driver.findElement(By.id("Pessoa_Endereco_Numero")).sendKeys("100");
 
-		/*
-		 * driver.findElement(By.id("Pessoa_Endereco_Logradouro")).sendKeys("Rua a");
-		 * 
-		 * 
-		 * driver.findElement(By.id("Pessoa_Endereco_Complemento")).sendKeys("casa");
-		 * 
-		 * driver.findElement(By.id("Pessoa_Endereco_Bairro")).sendKeys("Cajuru");
-		 * 
-		 * driver.findElement(By.id("Pessoa_Endereco_Cidade")).sendKeys("Curitiba");
-		 * 
-		 * 
-		 * new Select(driver.findElement(By.id("Pessoa_Endereco_EstadoId"))).
-		 * selectByVisibleText("PR");
-		 */
+
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
 
 		Gerar.Aguarde(controleTempo * 6);
