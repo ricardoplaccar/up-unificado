@@ -1,6 +1,5 @@
 package model;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -13,17 +12,23 @@ public class DataEvento {
 	public String Intervalo = "15";
 	public String ItervaloPassagem = "15";
 	public String BloqueioAposOferta = "3";
-    public String InicioDisputaFake;
-	private int minutoleilaoRealizar =10;//122;
+	public String InicioDisputaFake;
+	public String SegundaData;
+	public String TerceiraData;
+
+	private int minutoleilaoRealizar = 10;// 122;
 	private int diasRealizar = 0;
-	private int diasFim =1 ;
+	private int diasFim = 1;
 	private int minutoleilaoEncerrar = 10;
 
-	public DataEvento() throws ParseException {
-		HoraExibir = GetAddHora(0,0);
+	public DataEvento() {
+		HoraExibir = GetAddHora(0, 0);
 		InicioDisputaReal = GetAddHora(diasRealizar, minutoleilaoRealizar);
-		InicioDisputaFake = GetAddHora(diasRealizar, 122);
+		InicioDisputaFake = GetAddHora(diasRealizar, 240);
 		HoraFimExibir = GetAddHora(diasFim, minutoleilaoRealizar + minutoleilaoEncerrar);
+
+		SegundaData = GetAddHora(diasRealizar + diasFim + 1, minutoleilaoRealizar + minutoleilaoEncerrar);
+		TerceiraData = GetAddHora(diasRealizar + diasFim + 2, minutoleilaoRealizar + minutoleilaoEncerrar);
 
 	}
 
@@ -34,7 +39,7 @@ public class DataEvento {
 		calendar.add(Calendar.DATE, dias);
 		calendar.add(Calendar.MINUTE, minutos);
 		String stringData = DateFor.format(calendar.getTime());
-   //    System.out.println(" 1. -> " + stringData);
+		// System.out.println(" 1. -> " + stringData);
 		return stringData;
 
 	}

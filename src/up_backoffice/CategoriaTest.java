@@ -14,25 +14,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
 import model.Categoria;
+import model.ProdutoTipo;
 import model.vTest;
 import util.Gerar;
 
 class CategoriaTest {
 	int controleTempo = 1000;
-	boolean finaliza = true;
-	public vTest nnum = new vTest();
+	boolean finaliza = false;
+	public vTest ntest = new vTest();
+
 	
-
-	Categoria categoria = new Categoria(nnum); 
 	WebDriver driver = LoginTest.IniciaLogin();
-
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
 
 	@AfterEach
 	void tearDown() throws Exception {
@@ -43,52 +35,69 @@ class CategoriaTest {
 
 	}
 
-//	@Test
-	void CadastroCategoria_Deve_Retornar_Sucesso() throws IOException {
+	@Test
+	void CadastroCategoria_Imovel_Deve_Retornar_Sucesso() {
 
+		var cat = new Categoria(ntest, ProdutoTipo.Imovel);
+		CadastroCategoriaGeral(cat);
+	}
+
+	@Test
+	void CadastroCategoria_Veiculo_Deve_Retornar_Sucesso() {
+
+		var cat = new Categoria(ntest, ProdutoTipo.Veiculo);
+		CadastroCategoriaGeral(cat);
+
+	}
+
+
+
+	@Test
+	void CadastroSubCategoria_Imovel_Deve_Retornar_Sucesso() {
+		var cat = new Categoria(ntest, ProdutoTipo.Imovel,0);
+		CadastroSubCategoriaGeral(cat);
+	
+	}
+
+	@Test
+	void CadastroSubCategoria_Veiculo_Deve_Retornar_Sucesso() {
+		var cat = new Categoria(ntest, ProdutoTipo.Veiculo,0);
+		CadastroSubCategoriaGeral(cat);
+	
+	}
+
+	private void CadastroCategoriaGeral(Categoria cat) {
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Categoria")).click();
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Novo")).click();
-
+		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.id("Categoria_Nome")).click();
-		driver.findElement(By.id("Categoria_Nome")).sendKeys(categoria.Categoria);
-
+		driver.findElement(By.id("Categoria_Nome")).sendKeys(cat.Categoria);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button[1]")).click();
-
 		Gerar.Aguarde(controleTempo * 2);
-
 		String texto = driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success"))
 				.getText();
-
 		assertEquals(LoginTest.salvocomsucesso, texto);
 
-	}
-
-	@Test
-	void CadastroSubCategoria_Deve_Retornar_Sucesso() throws IOException {
-
-		CadastroCategoria_Deve_Retornar_Sucesso();
+	}	
+	
+	private void CadastroSubCategoriaGeral(Categoria cat) {
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Subcategorias")).click();
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Novo")).click();
-
+		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.id("SubCategoria_Nome")).click();
-		driver.findElement(By.id("SubCategoria_Nome")).sendKeys(categoria.SubCategoria);
-
-		new Select(driver.findElement(By.id("SubCategoria_TipoProduto"))).selectByVisibleText("Veículo");
-
-		new Select(driver.findElement(By.id("SubCategoria_CategoriaId"))).selectByVisibleText(categoria.Categoria);
-
+		Gerar.Aguarde(controleTempo);
+		driver.findElement(By.id("SubCategoria_Nome")).sendKeys(cat.SubCategoria);
+		Gerar.Aguarde(controleTempo);
+		new Select(driver.findElement(By.id("SubCategoria_CategoriaId"))).selectByVisibleText(cat.Categoria);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button[1]")).click();
-
 		Gerar.Aguarde(controleTempo * 2);
-
 		String texto = driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success"))
 				.getText();
-
 		assertEquals(LoginTest.salvocomsucesso, texto);
-
 	}
+
 }

@@ -1,45 +1,117 @@
 package model;
 
-import util.Gerar;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Categoria {
 
 	public String Categoria;
 	public String SubCategoria;
 
-	private String[] scategoria = { "Automóvel", "Caminhão", "Motocicleta", "Ônibus", "Caçamba" };
-	private String[] subcategoria = { "Carro de Passeio", "Truch", "Moto 150", "Escolar", "Sem Placa" };
+	String[] scategoria = { "Veículo", "Imóvel", "Diversos" };
+	String[] subveiculo = { "Carro de Passeio", "Caminhão", "Motocicleta" };
+	String[] subImovel = { "Imóvel Comercial", "Apartamento", "Prédio", "Sala Comercial", "Casa" };
+	String[] subGeral = { "Diversos", "Eletrônicos", "Informática" };
 
-	public Categoria() {
+	private int imovel = 1;
+	private int veiculo = 0;
+
+	public Categoria(String categoria, String Sub) {
+		Categoria = categoria;
+		SubCategoria = Sub;
 	}
 
+	public Categoria(vTest test, ProdutoTipo tipo) {
 
-	public Categoria(vTest nnum, String Categ, String Sub) {
+		try {
+			int ncategoria = test.Leia("Categoria");
+			int ncategoraMax = scategoria.length;
+			Categoria = scategoria[ncategoria];
+			ncategoria++;
+			if (ncategoria >= ncategoraMax)
+				ncategoria = 0;
+			test.Gravar("Categoria", ncategoria);
+			if (tipo == ProdutoTipo.Imovel) {
 
-		Categoria = Categ;
-		SubCategoria = Sub;
-		if (nnum != null) {
-			Categoria += nnum.Desc;
-			SubCategoria += nnum.Desc;
+				int nSubIm = test.Leia("SubImovel");
+				int SubMax = subImovel.length;
+				SubCategoria = subImovel[nSubIm];
+				nSubIm++;
+				if (nSubIm >= SubMax)
+					nSubIm = 0;
+				test.Gravar("SubImovel", nSubIm);
+
+			} else
+
+			if (tipo == ProdutoTipo.Veiculo) {
+				try {
+					int nSubVc = test.Leia("SubVeiculo");
+					int SubMax = subveiculo.length;
+					SubCategoria = subveiculo[nSubVc];
+					nSubVc++;
+					if (nSubVc >= SubMax)
+						nSubVc = 0;
+					test.Gravar("SubVeiculo", nSubVc);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else if (tipo == ProdutoTipo.Geral) {
+
+			}
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public Categoria(vTest test, ProdutoTipo tipo, int cat) {
+		if (tipo == ProdutoTipo.Imovel) {
+			Categoria = scategoria[imovel];
+			try {
+				int nSubIm = test.Leia("SubImovel");
+				int SubMax = subImovel.length;
+				SubCategoria = subImovel[nSubIm];
+				nSubIm++;
+				if (nSubIm >= SubMax)
+					nSubIm = 0;
+				test.Gravar("SubImovel", nSubIm);
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else {
+			Categoria = scategoria[veiculo];
+			try {
+				int nSubVc = test.Leia("SubVeiculo");
+				int SubMax = subveiculo.length;
+				SubCategoria = subveiculo[nSubVc];
+				nSubVc++;
+				if (nSubVc >= SubMax)
+					nSubVc = 0;
+				test.Gravar("SubVeiculo", nSubVc);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
-	
-	}
-
-	public Categoria(String Categ, String Sub) {
-
-		Categoria = Categ;
-		SubCategoria = Sub;
-
-	}
-
-	public Categoria(vTest nnum) {
-
-		// nnum = Gerar.getTest();
-		int ncategoria = Gerar.randomiza(5);
-
-		Categoria = scategoria[ncategoria] + nnum.Desc;
-		SubCategoria = subcategoria[ncategoria] + nnum.Desc;
 
 	}
 

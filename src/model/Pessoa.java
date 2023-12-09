@@ -14,7 +14,6 @@ public class Pessoa {
 	public String RG;
 	public String DT_Nasc;
 	public Email Email = new Email();
-	public Endereco endereco =new Endereco();
 	public String Fone;
 	public Pessoa(Tipo tipo) {
 

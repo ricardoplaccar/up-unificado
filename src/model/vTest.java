@@ -1,166 +1,103 @@
 package model;
 
-import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+//import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Properties;
 
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
-
-public class vTest {
+public class vTest extends Constants {
 	public String Desc;
 	public String Num;
 	public int quantidade = 0;
-	public int LoteVeiculoMax = 5;
-	public int LoteImovelMax = 5;
-
-//	public int test_num= 471;
 	public int test_num;
-	private int LoteVeiculo;
-	private int LoteImovel;
-	private int Ocupacao;
-	public int OcupacaoMax = 4;
-	private int Estagio;
-	public int EstagioMax = 5;
-	private int Comitente = -1;
-	private int ComitenteMax = 10;
-	private String versao = "1.5.61.5";
-	private String sistema = "Local_UP";
-	private final String arquivo = "d:\\Up_Local.json";
-
-	public int getComitente() {
-		Comitente++;
-		if (Comitente >= ComitenteMax)
-			Comitente = 0;
-		Gravar();
-
-		return Comitente;
-	}
-
-	public String getVersao() {
-		return versao;
-	}
-
-	public int getOcupacao() {
-		Ocupacao++;
-		if (Ocupacao > OcupacaoMax)
-			Ocupacao = 1;
-		Gravar();
-		return Ocupacao;
-	}
-
-	public int getEstagio() {
-		Estagio++;
-		if (Estagio > EstagioMax)
-			Estagio = 1;
-		Gravar();
-		return Estagio;
-	}
-
-	public int getLoteVeiculo() {
-		LoteVeiculo++;
-		if (LoteVeiculo > LoteVeiculoMax)
-			LoteVeiculo = 0;
-
-		Gravar();
-		return LoteVeiculo;
-	}
-
-	public int getLoteImovel() {
-
-		LoteImovel++;
-		if (LoteImovel > LoteImovelMax)
-			LoteImovel = 0;
-
-		Gravar();
-		return LoteImovel;
-	}
 
 	public vTest() {
-
-		// Gravar();
-
-		Leia();
-		Desc = " - Test(" + Num + ")";
-
-		Update();
-
+		
+		geraTest(0);	
+		
+	}
+	
+	public vTest(int Value) {
+		geraTest(Value);
+		
 	}
 
-	public void Update() {
+	private void geraTest(int Value) {
+		if (Value != 0) {
+			this.test_num = Value;
+			Num = Integer.toString(Value);
+			Desc = " - Test(" + Num + ")";
+		} else {
+			int ntest_num = -1;
+			try {
+				ntest_num = Leia("test_num");
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			this.test_num = ntest_num;
+			Num = Integer.toString(ntest_num);
+			ntest_num++;
 
-		this.test_num++;
+			Gravar("test_num", ntest_num);
+			Desc = " - Test(" + Num + ")";
 
-		Gravar();
-
-	}
-
-	private int GetInt(Object value) {
-		return ((BigDecimal) value).intValue();
-
-	}
-
-	private void Leia() {
-		try {
-
-			Reader reader = Files.newBufferedReader(Paths.get(arquivo));
-
-			JsonObject teste = (JsonObject) Jsoner.deserialize(reader);
-			JsonObject produto = (JsonObject) teste.get(sistema);
-
-			quantidade = GetInt(produto.get("quantidade"));
-			LoteVeiculoMax = GetInt(produto.get("LoteVeiculoMax"));
-			LoteImovelMax = GetInt(produto.get("LoteImovelMax"));
-			LoteImovel = GetInt(produto.get("LoteImovel"));
-			LoteVeiculo = GetInt(produto.get("LoteVeiculo"));
-			Comitente = GetInt(produto.get("Comitente"));
-			ComitenteMax = GetInt(produto.get("ComitenteMax"));
-
-			Ocupacao = GetInt(produto.get("Ocupacao"));
-			OcupacaoMax = GetInt(produto.get("OcupacaoMax"));
-			Estagio = GetInt(produto.get("Estagio"));
-			EstagioMax = GetInt(produto.get("EstagioMax"));
-
-			test_num = GetInt(produto.get("test_num"));
-			versao = (String) produto.get("versao");
-			Num = String.valueOf(test_num);
-			reader.close();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 
+		
+	}	
+	
+	public int Leia(String campo) throws FileNotFoundException, IOException {
+
+		var arquivo = "%s\\%s.ini".formatted(localTest, campo);
+
+		if (!FileExist(arquivo)) {
+			Gravar(campo, 0);
+			return 0;
+
+		} else {
+
+			try {
+				Properties prop = new Properties();
+				prop.load(new FileInputStream("%s\\%s.ini".formatted(localTest, campo)));
+				String valor = prop.getProperty(campo);
+				System.out.println(campo + "=" + valor);
+				return Integer.valueOf(valor);
+
+			} catch (IOException ex) {
+
+				Gravar("Campo", 1);
+
+				ex.printStackTrace();
+			}
+		}
+		return 0;
+
 	}
 
-	private void Gravar() {
+	private boolean FileExist(String campo) {
+		File f = new File(campo);
+		if (f.exists() && !f.isDirectory()) {
+			return true;
+		}
+		return false;
+	}
+
+	void Gravar(String campo, int valor) {
+
 		try {
 
-			// create a writer
-			BufferedWriter arquivoJson = Files.newBufferedWriter(Paths.get(arquivo));
-			JsonObject teste = new JsonObject();
-			JsonObject produto = new JsonObject();
-			produto.put("quantidade", quantidade);
-			produto.put("LoteVeiculo", LoteVeiculo);
-			produto.put("LoteVeiculoMax", LoteVeiculoMax);
-			produto.put("LoteImovel", LoteImovel);
-			produto.put("LoteImovelMax", LoteImovelMax);
-			produto.put("Comitente", Comitente);
-			produto.put("ComitenteMax", ComitenteMax);
-			produto.put("Ocupacao", Ocupacao);
-			produto.put("OcupacaoMax", OcupacaoMax);
-			produto.put("Estagio", Estagio);
-			produto.put("EstagioMax", EstagioMax);
-
-			produto.put("versao", versao);
-
-			produto.put("test_num", test_num);
-
-			teste.put(sistema, produto);
-			Jsoner.serialize(teste, arquivoJson);
-			arquivoJson.close();
+			FileOutputStream fos = new FileOutputStream("%s\\%s.ini".formatted(localTest, campo));
+			Properties prop = new Properties();
+			var str = Integer.toString(valor);
+			prop.put(campo, str);
+			prop.store(fos, "localhost");
+			fos.flush();
+			fos.close();
 
 		} catch (IOException ex) {
 			ex.printStackTrace();

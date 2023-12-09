@@ -12,6 +12,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
 import model.Comitente;
+import model.Endereco;
+import model.Pedido;
 import model.Pessoa;
 import model.Pessoa.Tipo;
 import model.vTest;
@@ -21,14 +23,14 @@ public class PessoasTest {
 
 	private int controleTempo = 1000;
 	private boolean finaliza = false;
-	private vTest nnum = new vTest();
-	Comitente comitent = new Comitente(nnum.getComitente() );
-	
-	
-	
-	private WebDriver driver = LoginTest.IniciaLogin();
+	private vTest test = new vTest();
+	private Comitente comitent = new Comitente(test);
+	private String ntest = test.Num;
 
-	private synchronized void AddDos(final WebDriver driver) {
+	LoginTest Login = new LoginTest(); 
+	private WebDriver driver = Login.IniciaLogin();
+
+	private void AddDos(final WebDriver driver) {
 		driver.findElement(By.xpath("//*[@id=\"tipoPessoa\"]/h3[3]/button")).click();
 		Gerar.Aguarde(controleTempo * 4);
 		new Select(driver.findElement(By.id("Documento_Tipo"))).selectByVisibleText("Contrato Social");
@@ -62,12 +64,9 @@ public class PessoasTest {
 
 		driver.findElement(By.partialLinkText("Novo")).click();
 		Gerar.Aguarde(1500);
-
-		var este = nnum.Num;
-
 		driver.findElement(By.id("Pessoa_IdExterno")).click();
 
-		driver.findElement(By.id("Pessoa_IdExterno")).sendKeys(este);
+		driver.findElement(By.id("Pessoa_IdExterno")).sendKeys(ntest);
 		//
 		driver.findElement(By.id("Pessoa_Tipo_chosen")).click();
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Tipo_chosen\"]/div/div/input")).sendKeys("Jurídica");
@@ -117,15 +116,12 @@ public class PessoasTest {
 			driver.findElement(By.id("Pessoa_CnpjNumero")).sendKeys(r);
 		}
 
-		driver.findElement(By.id("Pessoa_Endereco_Cep")).sendKeys(pes.endereco.Cep);
-		driver.findElement(By.id("Pessoa_Endereco_Numero")).click();
-
-		Gerar.Aguarde(controleTempo * 2);
-		driver.findElement(By.id("Pessoa_Endereco_Numero")).sendKeys("100");
+		CadastraEndereco(driver,pes);
+		
 
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
 
-		Gerar.Aguarde(controleTempo * 6);
+		Gerar.Aguarde(controleTempo*3);
 
 		String texto = driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success"))
 				.getText();
@@ -135,13 +131,13 @@ public class PessoasTest {
 	}
 
 	@Test
-	public void Cadastro_Fisica_Comitente_Deve_Retornar_Valido() throws IOException {
+	public void Cadastro_Fisica_Comitente_Deve_Retornar_Valido() {
 		// Regra deve Salvar sem reclamar dos campos de endereços
 
 //		var pes = new Pessoa(Tipo.Fisico);
 
 		// var driver = Login.IniciaLogin();
-	
+
 		driver.findElement(By.linkText("Pessoas")).click();
 		Gerar.Aguarde(controleTempo);
 
@@ -149,7 +145,7 @@ public class PessoasTest {
 		Gerar.Aguarde(controleTempo / 2);
 
 		driver.findElement(By.id("Pessoa_IdExterno")).click();
-		driver.findElement(By.id("Pessoa_IdExterno")).sendKeys(nnum.Num);
+		driver.findElement(By.id("Pessoa_IdExterno")).sendKeys(ntest);
 
 		driver.findElement(By.id("Pessoa_Tipo_chosen")).click();
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Tipo_chosen\"]/div/div/input")).sendKeys("Física");
@@ -159,13 +155,7 @@ public class PessoasTest {
 
 		driver.findElement(By.id("Pessoa_Nome")).click();
 		driver.findElement(By.id("Pessoa_Nome")).sendKeys(comitent.Nome);
-
-		driver.findElement(By.id("Pessoa_NovaImagem")).sendKeys(comitent.logo);
-		Gerar.Aguarde(controleTempo / 2);
-		
-		// driver.findElement(By.id("Pessoa_Apelido")).sendKeys(pes.Email.Apelido);
-
-		driver.findElement(By.id("Pessoa_Comitente")).click();
+	
 		driver.findElement(By.id("Pessoa_Situacao_chosen")).click();
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Situacao_chosen\"]/div/div/input")).sendKeys("Aprovado");
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Situacao_chosen\"]/div/div/input")).sendKeys(Keys.ENTER);
@@ -176,16 +166,30 @@ public class PessoasTest {
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Perfil_chosen\"]/div/div/input")).sendKeys("Cliente");
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Perfil_chosen\"]/div/div/input")).sendKeys(Keys.ENTER);
 
+		driver.findElement(By.id("Pessoa_Comitente")).click();
+
+		driver.findElement(By.id("Pessoa_NovaImagem")).sendKeys(comitent.logo);
+
+		
+		
+		try {
+			Thread.sleep(controleTempo *4);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+	
 		// AddDos(driver);
+	//	driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
 
-		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
-
-		Gerar.Aguarde(controleTempo * 6);
+		Gerar.Aguarde(controleTempo);
 
 		String texto = driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success"))
 				.getText();
 
-		Gerar.Aguarde(controleTempo / 4);
+		Gerar.Aguarde(controleTempo);
 		assertEquals(LoginTest.salvocomsucesso, texto);
 
 	}
@@ -203,17 +207,15 @@ public class PessoasTest {
 		driver.findElement(By.partialLinkText("Novo")).click();
 		Gerar.Aguarde(controleTempo);
 
-		var este = nnum.Num;
-
 		driver.findElement(By.id("Pessoa_IdExterno")).click();
 
-		driver.findElement(By.id("Pessoa_IdExterno")).sendKeys(este);
+		driver.findElement(By.id("Pessoa_IdExterno")).sendKeys(ntest);
 
 		driver.findElement(By.id("Pessoa_Tipo_chosen")).click();
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Tipo_chosen\"]/div/div/input")).sendKeys("Física");
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Tipo_chosen\"]/div/div/input")).sendKeys(Keys.ENTER);
 
-		Gerar.Aguarde(controleTempo);
+		Gerar.Aguarde(controleTempo * 2);
 
 		driver.findElement(By.id("Pessoa_Nome")).click();
 		driver.findElement(By.id("Pessoa_Nome")).sendKeys(pes.Nome);
@@ -252,22 +254,41 @@ public class PessoasTest {
 			driver.findElement(By.id("Pessoa_CpfNumero")).sendKeys(r);
 		}
 
-		driver.findElement(By.id("Pessoa_Endereco_Cep")).sendKeys(pes.endereco.Cep);
-		driver.findElement(By.id("Pessoa_Endereco_Numero")).click();
-
-		Gerar.Aguarde(1500);
-		driver.findElement(By.id("Pessoa_Endereco_Numero")).sendKeys("100");
-
-
+		CadastraEndereco(driver, pes);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
 
-		Gerar.Aguarde(controleTempo * 6);
+		Gerar.Aguarde(controleTempo);
 
 		String texto = driver.findElement(By.cssSelector("div.alert.alert-dismissible.fade.show.alert-success"))
 				.getText();
 
 		Gerar.Aguarde(controleTempo);
 		assertEquals(LoginTest.salvocomsucesso, texto);
+
+	}
+
+	private void CadastraEndereco(WebDriver driver, Pessoa pes) {
+
+		var ender = new Endereco(test);
+		
+		
+		driver.findElement(By.id("Pessoa_Endereco_Cep")).sendKeys(ender.Cep);
+		driver.findElement(By.id("Pessoa_Endereco_Numero")).click();
+		Gerar.Aguarde(1500);
+		driver.findElement(By.id("Pessoa_Endereco_Numero")).sendKeys("100");
+		Gerar.Aguarde(controleTempo * 3);
+		String s = driver.findElement(By.id("Pessoa_Endereco_Logradouro")).getAttribute("value");
+		driver.findElement(By.id("Pessoa_Endereco_Numero")).click();
+		Gerar.Aguarde(controleTempo);
+		var x = s.length();
+		if (x == 0) {
+			driver.findElement(By.id("Pessoa_Endereco_Logradouro")).sendKeys("Qualquer");
+			driver.findElement(By.id("Pessoa_Endereco_Bairro")).sendKeys("Qualquer");
+			driver.findElement(By.id("Pessoa_Endereco_Cidade")).sendKeys("Qualquer");
+			new Select(driver.findElement(By.id("Pessoa_Endereco_EstadoId"))).selectByIndex(1);
+			System.out.println("Falou endereco=>" + test.Desc);
+
+		}
 
 	}
 

@@ -3,6 +3,8 @@ package model;
 public enum FotoTipo {
      capaImovel,
 	 capaVeiculo,
+	 capaGeral,
 	 Imovel,
-	 Veiculo
+	 Veiculo,
+	 Geral
 }

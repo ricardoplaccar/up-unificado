@@ -16,7 +16,7 @@ import util.Gerar;
 class ProcessosTest {
 
 	int controleTempo = 1000;
-	boolean finaliza = true;
+	boolean finaliza = false;
 
 	private vTest nnum = new vTest();
 	WebDriver driver = LoginTest.IniciaLogin();

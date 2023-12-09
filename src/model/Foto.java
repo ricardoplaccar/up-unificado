@@ -1,5 +1,13 @@
 package model;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
 public class Foto {
 	public String local;
 
@@ -15,5 +23,8 @@ public class Foto {
 
 	public Foto() {
 	}
+
+	
+
 
 }

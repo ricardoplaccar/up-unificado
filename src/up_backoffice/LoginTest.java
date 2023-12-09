@@ -5,33 +5,30 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public class LoginTest {
+import model.Constants;
 
-public static String url_site = "https://localhost:1476/conta/entrar?ReturnUrl=%2F";
-//	public static String url_site = "https://up-leilaovip-backoffice-hom.azurewebsites.net/conta/entrar?ReturnUrl=%2F";
-//	
+public class LoginTest extends Constants{
+
+
 	public static final String salvocomsucesso = "Salvo com sucesso.";
-	
+
 	public static WebDriver IniciaLogin() {
-		
+
+
 
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("start-maximized");
-		
+		// Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe /T");
+		// System.setProperty("webdriver.chrome.driver",
+		// "c:\\Webdriver\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver(options);
-
 		// driver.manage().timeouts().implicitlyWait(20, null);
 		driver.manage().deleteAllCookies();
-		driver.get(url_site);
+		driver.get(Url_site);
 		driver.findElement(By.id("Login_Login")).clear();
-		
-//		driver.findElement(By.id("Login_Login")).sendKeys("ricsistemas@gmail.com");
-		driver.findElement(By.id("Login_Login")).sendKeys("Admin");
-
+		driver.findElement(By.id("Login_Login")).sendKeys(User);
 		driver.findElement(By.id("Login_Senha")).clear();
-		driver.findElement(By.id("Login_Senha")).sendKeys("Up123456");
-	//	driver.findElement(By.id("Login_Senha")).sendKeys("Ra870312");
-		
+		driver.findElement(By.id("Login_Senha")).sendKeys(Senha);
 		driver.findElement(By.cssSelector("i.fa-solid.fa-right-to-bracket")).click();
 		return driver;
 
