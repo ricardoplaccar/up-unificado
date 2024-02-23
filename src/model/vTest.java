@@ -11,18 +11,51 @@ import java.util.Properties;
 public class vTest extends Constants {
 	public String Desc;
 	public String Num;
+	public Boolean Judicial;
 	public int quantidade = 0;
 	public int test_num;
+	public int tipoEnvento;
+	public int IndexCategoria = 1; // 1 =Judicial,2 = Extrajudicial
+	public Boolean isDocs = true;
+
+	public String tipoEventoDesc;
+	private String[] TipoDesc = { "Padrão", "Proposta Valor", "Proposta Texto", "Proposta E-mail",
+			"Padrão sem disputa 1", "Padrão sem disputa 2", "Padrão sem disputa 3", "Padrão com disputa 1",
+			"Padrão com disputa 2", "Padrão com disputa 3" };
 
 	public vTest() {
-		
-		geraTest(0);	
-		
+
+		geraTest(0);
+
 	}
-	
+
+	public void setJudicial(Boolean jud) {
+		if (jud)
+			IndexCategoria = 1;
+		else
+			IndexCategoria = 2;
+// --------------------------------------
+		Judicial = jud;
+		isDocs = jud;
+
+	}
+
 	public vTest(int Value) {
 		geraTest(Value);
-		
+
+	}
+
+	public void SalvaTipoEnvento() {
+		tipoEnvento++;
+		if (tipoEnvento > 9) {
+			tipoEnvento = 5; // =2  
+			IndexCategoria = Judicial ? 2 : 1;
+
+		}
+
+		Gravar("tipo", tipoEnvento);
+		Gravar("IndexCategoria", IndexCategoria);
+
 	}
 
 	private void geraTest(int Value) {
@@ -30,14 +63,33 @@ public class vTest extends Constants {
 			this.test_num = Value;
 			Num = Integer.toString(Value);
 			Desc = " - Test(" + Num + ")";
+
+			try {
+				tipoEnvento = Leia("tipo");
+				IndexCategoria = Leia("IndexCategoria");
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				tipoEnvento = 2;
+				IndexCategoria = 1; // Judicial
+			}
+
 		} else {
-			int ntest_num = -1;
+			int ntest_num = 1;
 			try {
 				ntest_num = Leia("test_num");
+				tipoEnvento = Leia("tipo");
+				IndexCategoria = Leia("IndexCategoria");
+
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+				tipoEnvento = 1;
 			}
 			this.test_num = ntest_num;
 			Num = Integer.toString(ntest_num);
@@ -48,9 +100,12 @@ public class vTest extends Constants {
 
 		}
 
-		
-	}	
-	
+		tipoEventoDesc = TipoDesc[tipoEnvento - 1];
+		System.out.println(tipoEventoDesc);
+		Judicial = (IndexCategoria == 1);
+
+	}
+
 	public int Leia(String campo) throws FileNotFoundException, IOException {
 
 		var arquivo = "%s\\%s.ini".formatted(localTest, campo);
@@ -87,7 +142,7 @@ public class vTest extends Constants {
 		return false;
 	}
 
-	void Gravar(String campo, int valor) {
+	public void Gravar(String campo, int valor) {
 
 		try {
 

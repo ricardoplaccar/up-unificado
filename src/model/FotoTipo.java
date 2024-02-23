@@ -4,7 +4,9 @@ public enum FotoTipo {
      capaImovel,
 	 capaVeiculo,
 	 capaGeral,
+	 capaControle,
 	 Imovel,
 	 Veiculo,
-	 Geral
+	 Geral,
+	 Controle
 }

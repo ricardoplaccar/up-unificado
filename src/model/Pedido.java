@@ -2,6 +2,7 @@ package model;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
@@ -10,35 +11,66 @@ public class Pedido extends Constants {
 	public String Url;
 	public Categoria Categoria;
 	public String Processo;
-	public String Avaliado;
+	public String sAvaliado = "0";
 	public String Incremento;
-	
+    public String Desconto="0.0";
 	public Pagamento Pag;
-	private Double[] Desconto = { 0.0, 10.5, 35.3, 50.4 };
-	private Double[] Valor = new Double[4];
+	private Double[] Descontos = { 0.0, 6.5, 7.5, 12.0 };
+	private Double[] Valor = {0.0,0.0,0.0,0.0};
 	private DecimalFormat nf = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
 
 	public void SetValor(String value) {
 
-		double v = 0.0;
+		double v = 1.1;
+
 		try {
-			double l = DecimalFormat.getNumberInstance().parse(value).doubleValue();
+			double l = NumberFormat.getNumberInstance().parse(value).doubleValue();
 			v = l;
-			System.out.println("setValor:"+nf.format(l));
+			System.out.println("setValor:" + nf.format(l));
+			Valor[0] = v;
+			Valor[1] = v - (v * Descontos[1]) / 100;
+			Valor[2] = v - (v * (Descontos[1] + Descontos[2] )) / 100;
+			Valor[3] = v - (v * (Descontos[1] + Descontos[2] +  Descontos[3])) / 100;
 
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 
-		Valor[0] = v;
-		Valor[1] = v - (v * Desconto[1]) / 100;
-		Valor[2] = v - (v * Desconto[2]) / 100;
-		Valor[3] = v - (v * Desconto[3]) / 100;
+	}
+
+	public void SetAvaliado(String value) {
+
+		sAvaliado = value;
+		double avaliado = 1000;
+
+		try {
+
+			avaliado = NumberFormat.getNumberInstance().parse(value).doubleValue();
+			if (Valor[0] != 0.0)
+			{
+				var desconto =100 - ((Valor[0] /avaliado) * 100);
+				Desconto = String.format("%.2f", desconto);
+			}
+		else 
+		{
+			
+			Valor[0] = avaliado;	
+		}
+		
+			
+			System.out.println("==> Avaliacao =" + avaliado);
+			System.out.println("==> Valor =" + Valor[0]);
+			System.out.println("==> Desconto =" + Desconto);
+         
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	public String GetDesconto(int n) {
-		return String.format("%.2f", Desconto[n]);
+		return String.format("%.2f", Descontos[n]);
 
 	}
 
@@ -52,5 +84,4 @@ public class Pedido extends Constants {
 
 	}
 
-	
 }

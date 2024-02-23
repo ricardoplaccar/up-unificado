@@ -2,12 +2,7 @@ package up_backoffice;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,7 +18,7 @@ class CategoriaTest {
 	boolean finaliza = false;
 	public vTest ntest = new vTest();
 
-	
+
 	WebDriver driver = LoginTest.IniciaLogin();
 
 	@AfterEach
@@ -56,14 +51,14 @@ class CategoriaTest {
 	void CadastroSubCategoria_Imovel_Deve_Retornar_Sucesso() {
 		var cat = new Categoria(ntest, ProdutoTipo.Imovel,0);
 		CadastroSubCategoriaGeral(cat);
-	
+
 	}
 
 	@Test
 	void CadastroSubCategoria_Veiculo_Deve_Retornar_Sucesso() {
 		var cat = new Categoria(ntest, ProdutoTipo.Veiculo,0);
 		CadastroSubCategoriaGeral(cat);
-	
+
 	}
 
 	private void CadastroCategoriaGeral(Categoria cat) {
@@ -80,8 +75,8 @@ class CategoriaTest {
 				.getText();
 		assertEquals(LoginTest.salvocomsucesso, texto);
 
-	}	
-	
+	}
+
 	private void CadastroSubCategoriaGeral(Categoria cat) {
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Subcategorias")).click();

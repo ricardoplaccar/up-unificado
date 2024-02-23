@@ -17,8 +17,8 @@ public class Imovel {
 	public int nCategoria;
 	public ArrayList<Foto> ListaFotos = new ArrayList<>();
 
-	
-	private Imovel(Categoria categoria, String nome, String vlPedido, String vlAvaliado, 
+
+	private Imovel(Categoria categoria, String nome, String vlPedido, String vlAvaliado,
 			ArrayList<Foto> fotos, String urlMap, vTest nnum) {
 		Nome = nome + nnum.Desc;
 		Categoria = categoria;
@@ -27,7 +27,7 @@ public class Imovel {
 		ListaFotos = fotos;
 		UrlMap = urlMap;
 
-	} 
+	}
 
 	public Imovel(vTest test) {
 
@@ -43,7 +43,7 @@ public class Imovel {
 				"url", test));
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Imoveis\\Ap1\\";
 		ListaImovel.add(new Imovel(new Categoria("Imóvel", "Apartamento"), "Apartamento - Liberdade", "130.000,00",
-				"500.000,00",
+				"300.000,00",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"), new Foto(Caminho + "2.jpg"),
 						new Foto(Caminho + "3.jpg"), new Foto(Caminho + "4.jpg"), new Foto(Caminho + "5.jpg"),
 						new Foto(Caminho + "6.jpg"), new Foto(Caminho + "7.jpg"), new Foto(Caminho + "8.jpg"),
@@ -51,24 +51,24 @@ public class Imovel {
 				"url", test));
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Imoveis\\Ap2\\";
 		ListaImovel.add(new Imovel(new Categoria("Imóvel", "Apartamento"), "APARTAMENTO COM 45,83M² - BELA VISTA", "191.000,00",
-				"500.000,00",
+				"300.000,00",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"), new Foto(Caminho + "2.jpg"),
 						new Foto(Caminho + "3.jpg"), new Foto(Caminho + "4.jpg"), new Foto(Caminho + "5.jpg"),
 						new Foto(Caminho + "6.jpg"), new Foto(Caminho + "7.jpg"), new Foto(Caminho + "8.jpg"))),
 				"url", test));
 
 
-		
+
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Imoveis\\Predio1\\";
 		ListaImovel.add(new Imovel(new Categoria("Imóvel", "Prédio"), "Prédio Comercial - Santos Dumont", "129.000,00",
-				"500.000,00",  new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"),
+				"300.000,00",  new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"),
 						new Foto(Caminho + "2.jpg"), new Foto(Caminho + "3.jpg"), new Foto(Caminho + "4.jpg"), new Foto(Caminho + "5.jpg"), new Foto(Caminho + "6.jpg")
 
 				)), "url", test));
 
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Imoveis\\Sala1\\";
 		ListaImovel.add(new Imovel(new Categoria("Imóvel", "Sala Comercial"), "Sala Comercial", "130.000,00", "500.000,00",
-				
+
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"), new Foto(Caminho + "2.jpg"),
 						new Foto(Caminho + "3.jpg"), new Foto(Caminho + "4.jpg"), new Foto(Caminho + "5.jpg"),
 						new Foto(Caminho + "6.jpg"), new Foto(Caminho + "7.jpg"), new Foto(Caminho + "8.jpg"),
@@ -77,7 +77,7 @@ public class Imovel {
 
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Imoveis\\Casa1\\";
 		ListaImovel
-				.add(new Imovel(new Categoria("Imóvel", "Casa"), "Casa - Vila", "900.000,00", "1.300,000,00", 
+				.add(new Imovel(new Categoria("Imóvel", "Casa"), "Casa - Vila", "900.000,00", "1300.000,00",
 						new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"), new Foto(Caminho + "2.jpg"),
 								new Foto(Caminho + "3.jpg"), new Foto(Caminho + "4.jpg"), new Foto(Caminho + "5.jpg"),
 								new Foto(Caminho + "6.jpg"), new Foto(Caminho + "7.jpg"), new Foto(Caminho + "8.jpg"),
@@ -112,10 +112,10 @@ public class Imovel {
 
 			Salva(test, "LoteImovel", nLoteImovel, LoteImovelMax);
 			Salva(test, "Categoria", nCategoria, CategoriaMax);
-		
+
 			SalvaIndex(test, "OcupacaoIndex", nIndexOcupacao, IndexOcupacaoMax);
 			SalvaIndex(test, "EstagioIndex", nEstagioIndex, EstagiIndexMax);
-			
+
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -143,7 +143,7 @@ public class Imovel {
 		test.Gravar(campo, valor);
 
 	}
-	
-	
-	
+
+
+
 }

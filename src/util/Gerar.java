@@ -3,39 +3,29 @@ package util;
 
 
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Random;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-
-import model.vTest;
 
 public class Gerar {
 
 	public static void Scroll(WebDriver driver) {
 
-			
+
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollBy(0,500)");
-		Aguarde(1500); 
+		Aguarde(1500);
 
-	}	
-	
-	
-	
-	
-	
+	}
 
-	
-		
+
+
+
+
+
+
+
 
 	public static void Aguarde(long tempo) {
 		try {

@@ -9,9 +9,9 @@ public class Ofertas {
 
 	@Test
 	public void test() {
-	
-		var Login = new LoginTest(); 
-		WebDriver driver = Login.IniciaLogin();
+
+		var Login = new LoginTest();
+		WebDriver driver = LoginTest.IniciaLogin();
 
 		driver.findElement(By.linkText("Ofertas")).click();
 		driver.findElement(By.linkText("Eventos")).click();

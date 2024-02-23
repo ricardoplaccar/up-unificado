@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.Select;
 
 import model.Comitente;
 import model.Endereco;
-import model.Pedido;
 import model.Pessoa;
 import model.Pessoa.Tipo;
 import model.vTest;
@@ -27,7 +26,7 @@ public class PessoasTest {
 	private Comitente comitent = new Comitente(test);
 	private String ntest = test.Num;
 
-	LoginTest Login = new LoginTest(); 
+	LoginTest Login = new LoginTest();
 	private WebDriver driver = Login.IniciaLogin();
 
 	private void AddDos(final WebDriver driver) {
@@ -117,7 +116,7 @@ public class PessoasTest {
 		}
 
 		CadastraEndereco(driver,pes);
-		
+
 
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
 
@@ -155,7 +154,7 @@ public class PessoasTest {
 
 		driver.findElement(By.id("Pessoa_Nome")).click();
 		driver.findElement(By.id("Pessoa_Nome")).sendKeys(comitent.Nome);
-	
+
 		driver.findElement(By.id("Pessoa_Situacao_chosen")).click();
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Situacao_chosen\"]/div/div/input")).sendKeys("Aprovado");
 		driver.findElement(By.xpath("//*[@id=\"Pessoa_Situacao_chosen\"]/div/div/input")).sendKeys(Keys.ENTER);
@@ -170,17 +169,17 @@ public class PessoasTest {
 
 		driver.findElement(By.id("Pessoa_NovaImagem")).sendKeys(comitent.logo);
 
-		
-		
+
+
 		try {
 			Thread.sleep(controleTempo *4);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
-	
+
+
 		// AddDos(driver);
 	//	driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button")).click();
 
@@ -270,8 +269,8 @@ public class PessoasTest {
 	private void CadastraEndereco(WebDriver driver, Pessoa pes) {
 
 		var ender = new Endereco(test);
-		
-		
+
+
 		driver.findElement(By.id("Pessoa_Endereco_Cep")).sendKeys(ender.Cep);
 		driver.findElement(By.id("Pessoa_Endereco_Numero")).click();
 		Gerar.Aguarde(1500);

@@ -16,9 +16,9 @@ class ProdutosTest {
 
 
 	int controleTempo = 1000;
-	vTest test = new vTest(); 
+	vTest test = new vTest();
 	boolean finaliza = false;
-	
+
 	public String Texto ="Que tal realizar aquele sonho do carro novo? Na (nome da loja) você encontra toda a ajuda que precisa para tornar o seu sonho uma realidade! Carros novos e seminovos, de todas as marcas e com as melhores condições que você irá encontrar! Venha nos fazer uma visita (endereço da loja)! Estamos te aguardando!\r\n"
     		+ "Está procurando um carro bom, bonito e barato? Então você veio ao lugar certo! Aqui na (nome da loja) nós temos os melhores carros do mercado, das melhores marcas e pelos melhores preços. (nome da loja), segurança e confiabilidade!\r\n"
     		+ "Que tal ter um pouco mais de conforto além do sofá de casa e da sua cama? Então dê uma passadinha na (nome da loja) e confira todas as nossas ofertas! Carros novos e seminovos, condições incríveis de pagamento e as melhores marcas! Tudo isso te esperando em um único lugar!\r\n"
@@ -34,16 +34,16 @@ class ProdutosTest {
     		+ "Quer comprar um carro mas não sabe qual? Não tem problema, na (nome da loja), você encontra todos os modelos e marcas! Fale com um de nossos vendedores!\r\n"
     		+ "Para muitos, carro é mais que sonho, é uma paixão! E aqui na (nome da loja) a gente te entende como ninguém. Carros das melhores e em ótimas condições! Fale com quem entende a sua paixão!\r\n"
     		+ "Não perca a chance de trocar de carro! Somente neste final de semana você compra carro com zero de entrada! Isso mesmo que você ouviu, zero de entrada! Carro novo, só na (nome da loja)!";
-    
+
 
 
 	@Test
 	void Cadastrar_Veiculo_Deve_Retornar_sucesso() {
-			
+
 		var vc = new Veiculo(test);
-	
+
 		WebDriver driver = LoginTest.IniciaLogin();
-	
+
 		driver.findElement(By.linkText("Produtos")).click();
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Novo")).click();
@@ -56,23 +56,23 @@ class ProdutosTest {
 		new Select(driver.findElement(By.id("Produto_SubCategoriaId"))).selectByVisibleText("Carro de Passeio");
 		Gerar.Aguarde(controleTempo);
 
-		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(vc.Valor);
-		driver.findElement(By.id("Produto_ValorAvaliacao")).sendKeys(vc.Valor);
+		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(vc.LanceInicial);
+		driver.findElement(By.id("Produto_ValorAvaliacao")).sendKeys(vc.Avaliado);
 
 		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(1);
-			
+
 		driver.findElement(By.id("Produto_Judicial")).click();
 		Gerar.Aguarde(controleTempo*2);
-		
+
 		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId"))).selectByVisibleText("0032949-14.2023.8.19.5");
-		
-		Gerar.Aguarde(controleTempo);	
+
+		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button[1]")).click();// Salvar
-		
-		Gerar.Aguarde(controleTempo*2);	
-				
-		
-		
+
+		Gerar.Aguarde(controleTempo*2);
+
+
+
 		driver.findElement(By.id("Produto_Marca")).sendKeys(vc.Marca);
 		driver.findElement(By.id("Produto_Modelo")).sendKeys(vc.Modelo);
 		driver.findElement(By.id("Produto_Chassi")).sendKeys(vc.NumMotor);
@@ -87,7 +87,7 @@ class ProdutosTest {
 
 		driver.findElement(By.id("Produto_Quilometragem")).sendKeys(vc.KM);
 		Gerar.Aguarde(controleTempo);
-		
+
 		var ender = new Endereco(test); //  gg
 
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(ender.Cep);
@@ -112,11 +112,11 @@ class ProdutosTest {
 
 //	@Test
 	void Cadastrar_Imovel_Deve_Retornar_sucesso() {
-			
+
 		var im = new Imovel(test);
-	
-			WebDriver driver = LoginTest.IniciaLogin();	 
-		 
+
+			WebDriver driver = LoginTest.IniciaLogin();
+
 		driver.findElement(By.linkText("Produtos")).click();
 		Gerar.Aguarde(controleTempo);
 		driver.findElement(By.partialLinkText("Novo")).click();
@@ -129,32 +129,32 @@ class ProdutosTest {
 		new Select(driver.findElement(By.id("Produto_SubCategoriaId"))).selectByVisibleText(im.Categoria.SubCategoria);
 		Gerar.Aguarde(controleTempo);
 
-		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(im.VlPedido);
-		driver.findElement(By.id("Produto_ValorAvaliacao")).sendKeys(im.VlAvaliado);
+		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(im.LancInicial);
+		driver.findElement(By.id("Produto_ValorAvaliacao")).sendKeys(im.Avaliado);
 
 		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(1);
-			
+
 		driver.findElement(By.id("Produto_Judicial")).click();
 		Gerar.Aguarde(controleTempo);
-		
+
 		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId"))).selectByVisibleText("0032949-14.2023.8.19.56");
-		
-		Gerar.Aguarde(controleTempo);	 
+
+		Gerar.Aguarde(controleTempo);
 	    var endereco = new Endereco(test);
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(endereco.Cep);
 
 		driver.findElement(By.id("Produto_Local_Numero")).click();
 		Gerar.Aguarde(controleTempo*2);
 		driver.findElement(By.id("Produto_Local_Numero")).sendKeys("100");
-		
+
 
 		new Select(driver.findElement(By.id("Produto_SituacaoOcupacao"))).selectByIndex(1);
 		new Select(driver.findElement(By.id("Produto_EstagioObra"))).selectByIndex(5);
-		
+
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[4]/div[1]/button[2]")).click();
 		Gerar.Aguarde(controleTempo * 3);
-		
-		
+
+
 		var ListaFoto = im.ListaFotos;
 
 		for (Foto item : ListaFoto) {
@@ -164,7 +164,7 @@ class ProdutosTest {
 		Gerar.Aguarde(controleTempo * 2);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[3]/div[1]/button[1]/i")).click();
 
-	}	
-	
-	
+	}
+
+
 }

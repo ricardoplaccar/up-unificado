@@ -37,7 +37,7 @@ public class Comitente {
 
 	private String Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\logos\\";
 	private int Comitente;
-	
+
 
 	public Comitente() {
 	}
@@ -56,7 +56,7 @@ public class Comitente {
 			if (Comitente >= ComitenteMax)
 				Comitente = 0;
 			test.Gravar("Comitente", Comitente);
-		
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -3,6 +3,8 @@ package model;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import util.Gerar;
+
 public class DataEvento {
 
 	public String HoraExibir;
@@ -13,22 +15,73 @@ public class DataEvento {
 	public String ItervaloPassagem = "15";
 	public String BloqueioAposOferta = "3";
 	public String InicioDisputaFake;
+	public String SegundaDataFake;
+	public String TerceiraDataFake;
 	public String SegundaData;
 	public String TerceiraData;
-
-	private int minutoleilaoRealizar = 10;// 122;
+	private int minutoleilaoRealizar = 120;// 122;
 	private int diasRealizar = 0;
-	private int diasFim = 1;
-	private int minutoleilaoEncerrar = 10;
+	private int diasFim = 0;
+	private int minutoleilaoEncerrar = 0;
+	private int SegundaDataMinuto = 5;
+	private int TerceiraDataMinuto = 5;
+	private int minutofake = 180;
+	public boolean fake = minutofake <10 || diasRealizar < 1;
+	
+	
 
-	public DataEvento() {
+	private int Segundodia = 0;
+	private int Terceirodia = 0;
+
+	public DataEvento(int QtdEventos, char c) {
+
+		if (QtdEventos < 2) {
+			Segundodia = 0;
+		}
+		if (QtdEventos < 3) {
+			Terceirodia = 0;
+
+		}
+
 		HoraExibir = GetAddHora(0, 0);
 		InicioDisputaReal = GetAddHora(diasRealizar, minutoleilaoRealizar);
-		InicioDisputaFake = GetAddHora(diasRealizar, 240);
-		HoraFimExibir = GetAddHora(diasFim, minutoleilaoRealizar + minutoleilaoEncerrar);
+		SegundaData = GetAddHora(diasRealizar + diasFim + Segundodia,
+				minutoleilaoRealizar + minutoleilaoEncerrar + SegundaDataMinuto);
+		TerceiraData = GetAddHora(diasRealizar + diasFim + Terceirodia,
+				minutoleilaoRealizar + minutoleilaoEncerrar + SegundaDataMinuto + TerceiraDataMinuto);
+		
+		//--------------------------------------------------------------------------------------------------------------------------------------	
+			InicioDisputaFake = GetAddHora(diasRealizar, minutofake);
+		SegundaDataFake = GetAddHora(diasRealizar + diasFim + Segundodia,
+				minutoleilaoRealizar + minutoleilaoEncerrar + SegundaDataMinuto + minutofake);
+		TerceiraDataFake = GetAddHora(diasRealizar + diasFim + Segundodia + Terceirodia,
+				minutoleilaoRealizar + minutoleilaoEncerrar + SegundaDataMinuto + minutofake + TerceiraDataMinuto);
+		//--------------------------------------------------------------------------------------------------------------------------------------	
+	
+	}
 
-		SegundaData = GetAddHora(diasRealizar + diasFim + 1, minutoleilaoRealizar + minutoleilaoEncerrar);
-		TerceiraData = GetAddHora(diasRealizar + diasFim + 2, minutoleilaoRealizar + minutoleilaoEncerrar);
+	public DataEvento(int mes) {
+
+		int dias = Gerar.randomiza(28);
+		int hora = Gerar.randomiza(23);
+		int minutos = Gerar.randomiza(59);
+
+		HoraExibir = GetAddHora(dias, hora).substring(8);
+		InicioDisputaReal = GetAddHora(dias, minutos).substring(0, 8);
+		System.out.println("InicioDisputaReal:" + InicioDisputaReal);
+		System.out.println("hora:" + HoraExibir);
+
+	}
+
+	public DataEvento(int dia, int mes) {
+
+		int hora = Gerar.randomiza(23);
+		int minutos = Gerar.randomiza(59);
+
+		HoraExibir = GetAddHora(dia, hora).substring(8);
+		InicioDisputaReal = GetAddHora(dia, minutos).substring(0, 8);
+		System.out.println("InicioDisputaReal:" + InicioDisputaReal);
+		System.out.println("hora:" + HoraExibir);
 
 	}
 

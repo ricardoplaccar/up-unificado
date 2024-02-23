@@ -14,12 +14,12 @@ import util.Gerar;
 class BannerTest {
 
 	int controleTempo = 1000;
-	vTest test = new vTest(0); 
+	vTest test = new vTest(0);
 
 	@Test
 	void CadastrarBanner_Deve_Retornar_sucesso() {
-	
-		
+
+
 		var bn = new Banner(test);
 		     WebDriver driver = LoginTest.IniciaLogin();
 			driver.findElement(By.linkText("Banners")).click();
@@ -30,12 +30,12 @@ class BannerTest {
 			Gerar.Aguarde(controleTempo);
 			driver.findElement(By.xpath("/html/body/div/div[3]/form/div/div[3]/div/div/div[4]/div/div/div[2]/label/input")).sendKeys(bn.ImagemCelular);
 			Gerar.Aguarde(controleTempo);
-			
-			DataEvento dataEvento = new DataEvento();
+
+			DataEvento dataEvento = new DataEvento(1);
 			PreencheData(driver,"Banner_InicioExibicaoEm",dataEvento.HoraExibir);
 			driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/button[1]")).click();
-		
-		
+
+
 	}
 
 	private void PreencheData(WebDriver driver, String campoid, String valor) {
@@ -56,5 +56,5 @@ class BannerTest {
 		}
 
 	}
-	
+
 }

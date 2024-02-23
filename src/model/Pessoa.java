@@ -9,7 +9,7 @@ import util.Gerar;
 public class Pessoa {
 	public String Nome;
 	public String Representante;
-	
+
 	public String CPF_Cnpj;
 	public String RG;
 	public String DT_Nasc;
@@ -25,7 +25,7 @@ public class Pessoa {
 			RG = Gerar.rg(false);
 			DT_Nasc = "25/06/1980";
 			Fone = faker.phoneNumber().cellPhone();
-			
+
 
 		} else {
 			Nome = faker.company().name();
@@ -59,6 +59,6 @@ public class Pessoa {
 
 }
 
-	
-	
+
+
 

@@ -1,47 +1,72 @@
 package model;
 
-import java.io.IOException;
-
 public class Evento {
-	public Boolean Judicial;
+
 	public Pagamento Pagamento;
 	public DataEvento DataEvento;
 	public Oferta OfertaTipo;
-	public int IndexCategoria;
-	public int IndexQtdEventos;
+	public int IndexQtdEventos = 1;
 	public int IndexOpcaoDisputa = 1;
 	public Double Desconto1 = 25.2;
+	public int IndexTipo = 1;
+	public int DuracaoDisputa = 120;
+	public Boolean ComDisputa = false;
+	
 
-	public Evento(vTest test) {
-		Pagamento = new Pagamento(test);
-		DataEvento = new DataEvento();
-		OfertaTipo = new Oferta(test);
 
-		try {
-			int njudicial = test.Leia("Judicial");
-			// Todo int njudicial= 1;
+	public Evento(int tipo) {
 
-			int nQuantidade = test.Leia("EventosQtd");
-			Judicial = (njudicial == 1);
-			if (Judicial) {
-				IndexCategoria = 1;
-				test.Gravar("Judicial", 0);
-			} else {
-				IndexCategoria = 2;
-				test.Gravar("Judicial", 1);
-			}
-			IndexQtdEventos = nQuantidade;
-			// Todo IndexQtdEventos = 1;
-			if (IndexQtdEventos > 1)
-				OfertaTipo.IndexOferta = 1;
-			nQuantidade++;
-			if (nQuantidade >= 3)
-				nQuantidade = 1;
-			test.Gravar("EventosQtd", nQuantidade);
+		// int tipo = 10;
+		switch (tipo) {
+		case 2, 3, 4:
+			// ****************** Proposta ********************
+			OfertaTipo = new Oferta(tipo);
+			Pagamento = new Pagamento(2);
+			break;
+		// ****************** Com Padrão sem disputa ********************
+		case 5:
+			OfertaTipo = new Oferta(1);
+			IndexQtdEventos = 1;
+			Pagamento = new Pagamento(2);
 
-		} catch (IOException e) {
-			e.printStackTrace();
+			break;
+		case 6:
+			OfertaTipo = new Oferta(1);
+			IndexQtdEventos = 2;
+			Pagamento = new Pagamento(1);
+			break;
+
+		case 7:
+			OfertaTipo = new Oferta(1);
+			IndexQtdEventos = 3;
+			Pagamento = new Pagamento(2);
+			break;
+//  ******************   Com disputa	********************
+		case 8:
+			OfertaTipo = new Oferta(1);
+			IndexQtdEventos = 1;
+			IndexOpcaoDisputa = 3;
+			ComDisputa = true;
+			Pagamento = new Pagamento(3);
+			break;
+		case 9:
+			OfertaTipo = new Oferta(1);
+			IndexQtdEventos = 2;
+			IndexOpcaoDisputa = 3;
+			ComDisputa = true;
+			Pagamento = new Pagamento(3);
+			break;
+		case 10:
+			OfertaTipo = new Oferta(1);
+			IndexQtdEventos = 3;
+			IndexOpcaoDisputa = 3;
+			ComDisputa = true;
+			Pagamento = new Pagamento(2);
+			break;
+		default:
+
 		}
+		DataEvento = new DataEvento(IndexQtdEventos, 'c');
 
 	}
 
