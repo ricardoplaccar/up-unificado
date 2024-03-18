@@ -18,8 +18,9 @@ public class Endereco {
 			Cep = ceps[nCep];
 			nCep++;
 
-			if (nCep >= cepMax)
+			if (nCep >= cepMax) {
 				nCep = 0;
+			}
 			test.Gravar("Cep", nCep);
 
 		} catch (FileNotFoundException e) {

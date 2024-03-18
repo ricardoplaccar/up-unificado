@@ -2,31 +2,28 @@ package up_backoffice;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.WheelInput;
 import org.openqa.selenium.support.ui.Select;
 
+import Mock.GeralMock;
+import Mock.ImovelMock;
+import Mock.VeiculoMock;
 import model.Comitente;
 import model.Constants;
 import model.Endereco;
 import model.Evento;
 import model.Foto;
 import model.FotoTipo;
-import model.Geral;
-import model.Imovel;
 import model.Pedido;
-import model.Veiculo;
 import model.vTest;
 
 class EventoTest extends Constants {
@@ -34,7 +31,7 @@ class EventoTest extends Constants {
 	int controleTempo = TestControleTempo;
 
 	public vTest test = new vTest(num_reuso);
-	private Comitente Comit = new Comitente(test);
+	private Comitente Comitente = new Comitente(test);
 
 	private Evento Evento = new Evento(test.tipoEnvento);
 	private int nAux;
@@ -42,8 +39,9 @@ class EventoTest extends Constants {
 //	@Test
 	void DocumentoTest() throws Exception {
 		var EventoPerdido = "(" + num_reuso + ")";
-		if (num_reuso == 0)
+		if (num_reuso == 0) {
 			Assert.fail("num_reuso = 0");
+		}
 
 		WebDriver driver = LoginTest.IniciaLogin();
 //		ArrayList<Pedido> ListaPedidos = new ArrayList<>();
@@ -67,13 +65,6 @@ class EventoTest extends Constants {
 		var isJuridico = (driver.findElement(By.id("Produto_Judicial")).getAttribute("checked") != null);
 		System.out.println("Juridico =" + isJuridico);
 
-		/*
-		 * 
-		 * WebElement iframe = driver.findElement(By.id("Produto_Local_Cep")); new
-		 * Actions(driver) .scrollToElement(iframe) .perform();
-		 * 
-		 */
-
 		ScrollDown(driver, "Produto_Local_Cep");
 
 		//
@@ -95,9 +86,11 @@ class EventoTest extends Constants {
 
 		FotoTipo tipoEvento = null;
 		var EventoPerdido = "(" + num_reuso + ")";
-		if (num_reuso == 0)
-			if (num_reuso == 0)
+		if (num_reuso == 0) {
+			if (num_reuso == 0) {
 				Assert.fail("num_reuso = 0");
+			}
+		}
 
 		WebDriver driver = LoginTest.IniciaLogin();
 		ArrayList<Pedido> ListaPedidos = new ArrayList<>();
@@ -110,6 +103,7 @@ class EventoTest extends Constants {
 				System.out.println("Linhas(%s)".formatted(nrow));
 
 			}
+
 			System.out.println("row =" + nrow);
 			clickItemCadastroProduto(driver, nrow);
 			Aguarde(controleTempo * 2);
@@ -117,7 +111,14 @@ class EventoTest extends Constants {
 			var lanceInicial = driver.findElement(By.id("Produto_ValorPedido")).getAttribute("value");
 			var avaliado = driver.findElement(By.id("Produto_ValorAvaliacao")).getAttribute("value");
 			var isJuridico = (driver.findElement(By.id("Produto_Judicial")).getAttribute("checked") != null);
-			test.setJudicial(isJuridico);
+
+			System.out.println("Categoria:%s".formatted(isJuridico ? "Judicial":"ExtraJudicial"));
+
+			test.setCategoria(isJuridico);
+
+
+
+			Evento.Pagamento.setPagamento(isJuridico);
 
 			if (lanceInicial.length() < 2) {
 				lanceInicial = avaliado;
@@ -126,16 +127,17 @@ class EventoTest extends Constants {
 			}
 
 			var select = new Select(driver.findElement(By.id("Produto_Tipo")));
-			ped.Descricao = driver.findElement(By.id("Produto_Nome")).getAttribute("value");
-			ped.SetValor(lanceInicial);
-			ped.SetAvaliado(avaliado);
-			ped.Incremento = "1000,00";
-
 			WebElement option = select.getFirstSelectedOption();
 			String Produto_Tipo = option.getText();
 
+			ped.Descricao = driver.findElement(By.id("Produto_Nome")).getAttribute("value");
+			ped.Tipo = Produto_Tipo;
+			ped.SetValor(lanceInicial);
+			ped.SetAvaliado(avaliado);
+			ped.Incremento = "1000,00";
 			if (Produto_Tipo.equals("Veículo")) {
 				tipoEvento = FotoTipo.capaVeiculo;
+
 			} else if (Produto_Tipo.equals("Imóvel")) {
 				tipoEvento = FotoTipo.capaImovel;
 
@@ -143,6 +145,14 @@ class EventoTest extends Constants {
 
 			{
 				tipoEvento = FotoTipo.capaGeral;
+
+			}
+
+			if (nrow == 1) {
+				select = new Select(driver.findElement(By.id("Produto_SubCategoriaId")));
+				option = select.getFirstSelectedOption();
+				Evento.Segmento = option.getText(); // seleciona texto
+
 			}
 
 			ListaPedidos.add(ped);
@@ -157,7 +167,6 @@ class EventoTest extends Constants {
 		{
 
 			System.out.println("Evento Editar:" + num_reuso);
-
 			PreencheEvento(driver, tipoEvento);
 
 		} else {
@@ -172,12 +181,12 @@ class EventoTest extends Constants {
 		nAux = 1;
 		ListaPedidos.forEach(vc -> {
 			System.out.println(String.format("AddProduto(%d/%d)", nAux, ListaPedidos.size()));
-			var ped = new Pedido();
+			var ped = new Pedido("");
 			ped.Descricao = vc.Descricao;
 			ped.SetValor(vc.GetValor(0));
 			ped.Incremento = vc.Incremento;
 			ped.SetAvaliado(vc.sAvaliado);
-			ped.Url = Comit.UrlFinaceira;
+			ped.Url = Comitente.UrlFinaceira;
 			AddProdutoEvento(driver, ped);
 			nAux++;
 
@@ -216,29 +225,34 @@ class EventoTest extends Constants {
 	@Test
 	void CadastarEvento_Veiculo_Unico_Deve_Retornar_sucesso() throws Exception {
 
-		if (num_reuso != 0)
+		if (num_reuso != 0) {
 			Assert.fail("num_reuso != 0");
+		}
 
-		ArrayList<Veiculo> ListaVeiculos = new ArrayList<>();
+		ArrayList<VeiculoMock> ListaVeiculos = new ArrayList<>();
 		WebDriver driver = LoginTest.IniciaLogin();
 		for (var i = 0; i < loteVeiculoQtd; i++) {
 			var vc = CadastrarVeiculo(driver);
+			if (i == 0) {
+				Evento.Segmento = vc.Categoria.Segmento;
+			}
 			ListaVeiculos.add(vc);
 		}
 
 		// *************************** Cadastra Eventos ****************
 
 		NovoEvento(driver);
+		Evento.Pagamento.setPagamento(test.Judicial);
 		PreencheEvento(driver, FotoTipo.capaVeiculo);
 
 		// editar produto
 		ListaVeiculos.forEach(vc -> {
-			var ped = new Pedido();
+			var ped = new Pedido("Veículo");
 			ped.Descricao = vc.Nome;
 			ped.SetValor(vc.LanceInicial);
 			ped.SetAvaliado(vc.Avaliado);
 			ped.Incremento = vc.Incremento;
-			ped.Url = Comit.UrlFinaceira;
+			ped.Url = Comitente.UrlFinaceira;
 			AddProdutoEvento(driver, ped);
 
 		});
@@ -248,26 +262,31 @@ class EventoTest extends Constants {
 	@Test
 	void CadastarEvento_Geral_Unico_Deve_Retornar_sucesso() throws Exception {
 
-		if (num_reuso != 0)
+		if (num_reuso != 0) {
 			Assert.fail("num_reuso != 0");
+		}
 
 		WebDriver driver = LoginTest.IniciaLogin();
-		ArrayList<Geral> ListaGeral = new ArrayList<>();
+		ArrayList<GeralMock> ListaGeral = new ArrayList<>();
 		for (var i = 0; i < loteGeralQtd; i++) {
 			var ge = CadastrarGeral(driver);
 			ListaGeral.add(ge);
 			System.out.println("Diversos=" + (i + 1) + "/" + loteGeralQtd);
+			if (i == 0) {
+				Evento.Segmento = ge.Categoria.Segmento;
+			}
 		}
 
-		// *************************** Evento Geral ***********************************
+		// *************************** Evento GeralMock ***********************************
 
 		NovoEvento(driver);
+		Evento.Pagamento.setPagamento(test.Judicial);
 		PreencheEvento(driver, FotoTipo.capaGeral);
 
 		ListaGeral.forEach(ge -> {
-			var ped = new Pedido();
+			var ped = new Pedido("GeralMock");
 			ped.Descricao = ge.Descricao;
-			ped.Url = Comit.UrlFinaceira;
+			ped.Url = Comitente.UrlFinaceira;
 			ped.SetValor(ge.LanceInicial);
 			ped.SetAvaliado(ge.Avaliado);
 			ped.Incremento = ge.Incremento;
@@ -275,14 +294,14 @@ class EventoTest extends Constants {
 			AddProdutoEvento(driver, ped);
 
 		});
-		// *************************** Evento Geral ***********************************
+		// *************************** Evento GeralMock ***********************************
 		test.SalvaTipoEnvento();
 	}
 
-	private Geral CadastrarGeral(WebDriver driver) throws Exception {
+	private GeralMock CadastrarGeral(WebDriver driver) throws Exception {
 		System.out.println("***********************  CadastrarGeral  ********************");
-		var ge = new Geral(test);
-		var ped = new Pedido();
+		var ge = new GeralMock(test);
+		var ped = new Pedido("GeralMock");
 
 		ped.Categoria = ge.Categoria;
 		ped.Descricao = ge.Descricao;
@@ -302,7 +321,7 @@ class EventoTest extends Constants {
 		return ge;
 	}
 
-	private void PreecheGeral(WebDriver driver, Geral ge) {
+	private void PreecheGeral(WebDriver driver, GeralMock ge) {
 		System.out.println("***********************  PreecheGeral  ********************");
 
 		driver.findElement(By.id("Produto_Marca")).sendKeys(ge.Marca);
@@ -312,41 +331,46 @@ class EventoTest extends Constants {
 	@Test
 	void CadastarEvento_Imovel_Unico_Deve_Retornar_sucesso() throws Exception {
 
-		if (num_reuso != 0)
+		if (num_reuso != 0) {
 			Assert.fail("num_reuso != 0");
+		}
 
 		WebDriver driver = LoginTest.IniciaLogin();
-		ArrayList<Imovel> ListaImoveis = new ArrayList<>();
+		ArrayList<ImovelMock> ListaImoveis = new ArrayList<>();
 		for (var i = 0; i < loteImoveisQtd; i++) {
 			var im = CadastrarImovel(driver);
 			ListaImoveis.add(im);
-			System.out.println("Imovel= %d/%d".formatted((i + 1), loteImoveisQtd));
+			System.out.println("ImovelMock= %d/%d".formatted((i + 1), loteImoveisQtd));
+			if (i == 0) {
+				Evento.Segmento = im.Categoria.Segmento;
+			}
 		}
 
-		// *************************** Evento Imovel ***********************************
+		// *************************** Evento ImovelMock ***********************************
 
 		NovoEvento(driver);
+		Evento.Pagamento.setPagamento(test.Judicial);
 		PreencheEvento(driver, FotoTipo.capaImovel);
-
 		ListaImoveis.forEach(im -> {
-			var ped = new Pedido();
+			var ped = new Pedido("ImovelMock");
 			ped.Descricao = im.Nome;
-			ped.Url = Comit.UrlFinaceira;
+			ped.Url = Comitente.UrlFinaceira;
 			ped.SetValor(im.LancInicial);
 			ped.SetAvaliado(im.Avaliado);
 			ped.Incremento = "1.000,00";
 			AddProdutoEvento(driver, ped);
 
 		});
-		// *************************** Evento Imovel ***********************************
+		// *************************** Evento ImovelMock ***********************************
 		test.SalvaTipoEnvento();
 	}
 
 	// *************************** Funcoes ***********************************
 	private void EnviarDocumentoEvento(WebDriver driver, int i, vTest test) {
 
-		if (!test.isDocs)
+		if (!test.isDocs || !test.Judicial) {
 			return;
+		}
 
 		System.out.println("***********************  Envia documento Evento  ********************");
 
@@ -354,10 +378,11 @@ class EventoTest extends Constants {
 		Aguarde(TestControleTempo * 2);
 		var descricao = "";
 
-		if (i == 0)
+		if (i == 0) {
 			descricao = "Edital/Regulamento";
-		else
+		} else {
 			descricao = "Outros";
+		}
 
 		driver.findElement(By.id("Documento_Nome")).clear();
 		driver.findElement(By.id("Documento_Nome")).sendKeys(descricao);
@@ -393,12 +418,12 @@ class EventoTest extends Constants {
 
 	}
 
-	private Imovel CadastrarImovel(WebDriver driver) throws Exception {
-		System.out.println("***********************  Cadastra Imovel  ********************");
+	private ImovelMock CadastrarImovel(WebDriver driver) throws Exception {
+		System.out.println("***********************  Cadastra ImovelMock  ********************");
 
-		var im = new Imovel(test);
+		var im = new ImovelMock(test);
 
-		var ped = new Pedido();
+		var ped = new Pedido("Imóvel");
 		ped.Categoria = im.Categoria;
 		ped.Descricao = im.Nome;
 		ped.SetValor(im.LancInicial);
@@ -417,8 +442,8 @@ class EventoTest extends Constants {
 
 	}
 
-	private void PreecheImovel(WebDriver driver, Imovel im) {
-		System.out.println("***********************  Preenche Imovel  ********************");
+	private void PreecheImovel(WebDriver driver, ImovelMock im) {
+		System.out.println("***********************  Preenche ImovelMock  ********************");
 
 		new Select(driver.findElement(By.id("Produto_SituacaoOcupacao"))).selectByIndex(im.IndexOcupacao);
 		new Select(driver.findElement(By.id("Produto_EstagioObra"))).selectByIndex(im.IndexEstagio);
@@ -441,7 +466,7 @@ class EventoTest extends Constants {
 		driver.findElement(By.id("Produto_Nome")).sendKeys(ped.Descricao);
 		Aguarde(controleTempo * 2);
 
-		new Select(driver.findElement(By.id("Produto_Tipo"))).selectByVisibleText(ped.Categoria.Categoria);
+		new Select(driver.findElement(By.id("Produto_Tipo"))).selectByVisibleText(ped.Tipo);
 		Aguarde(controleTempo * 3);
 
 		new Select(driver.findElement(By.id("Produto_SubCategoriaCategoriaId")))
@@ -453,7 +478,7 @@ class EventoTest extends Constants {
 
 		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(valor);
 		driver.findElement(By.id("Produto_ValorAvaliacao")).sendKeys(ped.sAvaliado);
-		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(Comit.IndexComitente);
+		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(Comitente.IndexComitente);
 		// TODO tipo do evento
 		if (test.Judicial) {
 			driver.findElement(By.id("Produto_Judicial")).click();
@@ -489,11 +514,11 @@ class EventoTest extends Constants {
 		Aguarde(controleTempo * 7);
 	}
 
-	private Veiculo CadastrarVeiculo(WebDriver driver) throws Exception {
+	private VeiculoMock CadastrarVeiculo(WebDriver driver) throws Exception {
 		System.out.println("***********************  Cadastra Produto  ********************");
 
-		var vc = new Veiculo(test);
-		var ped = new Pedido();
+		var vc = new VeiculoMock(test);
+		var ped = new Pedido("Veículo");
 
 		ped.Descricao = vc.Nome;
 		ped.SetValor(vc.LanceInicial);
@@ -520,7 +545,7 @@ class EventoTest extends Constants {
 
 	}
 
-	private void PreencheVeiculo(WebDriver driver, Veiculo vc) {
+	private void PreencheVeiculo(WebDriver driver, VeiculoMock vc) {
 		driver.findElement(By.id("Produto_Marca")).sendKeys(vc.Marca);
 		driver.findElement(By.id("Produto_Modelo")).sendKeys(vc.Modelo);
 
@@ -558,14 +583,15 @@ class EventoTest extends Constants {
 		new Select(driver.findElement(By.id("Evento_Categoria"))).selectByIndex(test.IndexCategoria);
 		Aguarde(controleTempo * 2);
 		driver.findElement(By.id("Evento_Segmento")).clear();
-		driver.findElement(By.id("Evento_Segmento")).sendKeys(getSegmento(fotocapatipo));
+		// driver.findElement(By.id("Evento_Segmento")).sendKeys(getSegmento(fotocapatipo));
+		driver.findElement(By.id("Evento_Segmento")).sendKeys(Evento.Segmento);
 		driver.findElement(By.id("Evento_DescricaoGeral")).clear();
 		driver.findElement(By.id("Evento_DescricaoGeral")).sendKeys("Venda de de Produtos");
 		Aguarde(controleTempo);
 		new Select(driver.findElement(By.id("Evento_QuantidadeEventos"))).selectByIndex(Evento.IndexQtdEventos);
 		Aguarde(controleTempo * 3);
 		new Select(driver.findElement(By.id("Evento_FormaOferta"))).selectByIndex(Evento.OfertaTipo.getIndexOferta());
-		Aguarde(controleTempo * 4);
+		Aguarde(controleTempo * 2);
 
 		if (Evento.OfertaTipo.PropostaTexto) {
 			// proposta por texto
@@ -592,7 +618,9 @@ class EventoTest extends Constants {
 
 		ScrollDown(driver, "Evento_Tipo");
 
-		PreencheFotos(driver, fotocapatipo);
+		PreencheFotoEvento(driver, fotocapatipo);
+		Aguarde(controleTempo);
+		System.out.println("=>Evento:%s".formatted(test.Judicial ? "Judicial":"ExtraJudicial"));
 
 		new Select(driver.findElement(By.id("Evento_Tipo"))).selectByIndex(Evento.IndexTipo);
 		Aguarde(controleTempo * 4);
@@ -602,6 +630,11 @@ class EventoTest extends Constants {
 		new Select(driver.findElement(By.id("Evento_Configuracao_OpcaoDisputa")))
 				.selectByIndex(Evento.IndexOpcaoDisputa);
 		Aguarde(controleTempo * 3);
+
+		 if (test.Remanecente) {
+			driver.findElement(By.id("Evento_Remanescente")).click();
+		}
+
 		if (Evento.ComDisputa) {
 			driver.findElement(By.id("Evento_Configuracao_DuracaoDisputa")).clear();
 
@@ -611,18 +644,22 @@ class EventoTest extends Constants {
 		}
 
 		PreencheDataFake(driver, true);
+		 if (test.OfertaAutomatica) {
+			driver.findElement(By.id("Evento_Configuracao_PermiteOfertaAutomatica")).click();
+		}
 		Salvar(driver, true); //
 
-		if (!Evento.DataEvento.fake)
+		if (Evento.DataEvento.fake) {
 			PreencheDataFake(driver, false);
+		}
 
 		if (!DocumentoExist(driver)) {
-
 			EnviarDocumentoEvento(driver, 0, test);
 			EnviarDocumentoEvento(driver, 2, test);
 		}
-
-		Salvar(driver, true);
+		if (Evento.DataEvento.fake || test.isDocs) {
+			Salvar(driver, true);
+		}
 
 		Aguarde(controleTempo);
 
@@ -645,6 +682,7 @@ class EventoTest extends Constants {
 
 		}
 
+		Aguarde(TestControleTempo);
 		PreencheData(driver, "Evento_PrimeiroIniciaOuEncerraEm", DataInicioDisputa);
 
 		// TODO Eventos Quantidade
@@ -664,7 +702,7 @@ class EventoTest extends Constants {
 
 	}
 
-	private void PreencheFotos(WebDriver driver, FotoTipo fotocapatipo) {
+	private void PreencheFotoEvento(WebDriver driver, FotoTipo fotocapatipo) {
 		String arquivo = null;
 
 		try {
@@ -718,17 +756,13 @@ class EventoTest extends Constants {
 
 		if (!CapaExiste(driver)) {
 
-			driver.findElement(By.xpath(
-					"/html/body/div/div[3]/form/div/div[14]/div[2]/div[1]/div/div/div/div[12]/div/div/div[2]/label/input"))
-					.sendKeys(arquivo);
+			driver.findElement(By.id("Evento_NovaFoto")).sendKeys(arquivo);
 			Aguarde(controleTempo * 4);
 		}
 		// foto banner
 		if (!BannerExiste(driver)) {
 
-			driver.findElement(By.xpath(
-					"/html/body/div/div[3]/form/div/div[14]/div[2]/div[1]/div/div/div/div[13]/div/div/div[2]/label/input"))
-					.sendKeys(getBanner(fotocapatipo));
+			driver.findElement(By.xpath("/html/body/div/div[3]/form/div/div[14]/div[2]/div[1]/div/div/div/div[14]/div/div/div[2]/label/input")).sendKeys(getBanner(fotocapatipo));
 			Aguarde(controleTempo * 5);
 
 		}
@@ -750,7 +784,9 @@ class EventoTest extends Constants {
 
 	private boolean DocumentoExist(WebDriver driver) {
 		List<WebElement> trs = driver.findElements(By.cssSelector("tbody > tr"));
-		return trs.size() > 1;
+
+		test.isDocs = trs.size() > 1;
+		return test.isDocs;
 	}
 
 	private void AddProdutoEvento(WebDriver driver, Pedido ped) {
@@ -788,16 +824,19 @@ class EventoTest extends Constants {
 		driver.findElement(By.id("Anuncio_Incremento")).sendKeys(ped.Incremento);
 		driver.findElement(By.id("Anuncio_ValorAvaliado")).sendKeys(ped.sAvaliado);
 
-		if (Evento.Pagamento.Quero_financiar)
+		if (Evento.Pagamento.Quero_financiar) {
 			driver.findElement(By.id("Anuncio_Financiavel")).click();
+		}
 
 		driver.findElement(By.id("Anuncio_UriFinanciamentoExterno")).sendKeys(ped.Url);
 
-		if (Evento.Pagamento.Parcelado)
+		if (Evento.Pagamento.Parcelado) {
 			driver.findElement(By.id("Anuncio_Parcelamento")).click();
+		}
 
-		if (Evento.Pagamento.AVista)
+		if (Evento.Pagamento.AVista) {
 			driver.findElement(By.id("Anuncio_AVista")).click();
+		}
 
 		PreencheData(driver, "Anuncio_InicioDestaqueEm", Evento.DataEvento.HoraExibir);
 		Salvar(driver, false);
@@ -813,6 +852,7 @@ class EventoTest extends Constants {
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[14]/div[1]/button[3]/i")).click();
 		Aguarde(controleTempo * 2);
 		driver.findElement(By.id("FiltroProduto_Texto")).sendKeys(value);
+		Aguarde(controleTempo);
 		driver.findElement(By.xpath("//*[@id=\"placeholder\"]/div[1]/div[1]/div/button")).click(); // botao Lupa
 		Aguarde(controleTempo * 3);
 		driver.findElement(By.xpath("//*[@id=\"produtosTab\"]/div/div/table/tbody/tr/td[1]/a/span")).click();
@@ -851,7 +891,6 @@ class EventoTest extends Constants {
 		Aguarde(controleTempo * 4);
 		// caso aparer pop menssagem de confirmação
 		if ((Evento.IndexQtdEventos > 1) && EventoSalvar) {
-
 			driver.findElement(By.xpath("//*[@id=\"ConfirmacaoModal\"]/div[1]/div/div/div[3]/button[1]")).click();
 			Aguarde(controleTempo * 2);
 		}

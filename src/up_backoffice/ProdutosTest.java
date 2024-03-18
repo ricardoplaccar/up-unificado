@@ -5,10 +5,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import Mock.ImovelMock;
+import Mock.VeiculoMock;
 import model.Endereco;
 import model.Foto;
-import model.Imovel;
-import model.Veiculo;
 import model.vTest;
 import util.Gerar;
 
@@ -40,7 +40,7 @@ class ProdutosTest {
 	@Test
 	void Cadastrar_Veiculo_Deve_Retornar_sucesso() {
 
-		var vc = new Veiculo(test);
+		var vc = new VeiculoMock(test);
 
 		WebDriver driver = LoginTest.IniciaLogin();
 
@@ -113,7 +113,7 @@ class ProdutosTest {
 //	@Test
 	void Cadastrar_Imovel_Deve_Retornar_sucesso() {
 
-		var im = new Imovel(test);
+		var im = new ImovelMock(test);
 
 			WebDriver driver = LoginTest.IniciaLogin();
 

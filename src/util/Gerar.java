@@ -58,10 +58,11 @@ public class Gerar {
 				+ String.valueOf(n9);
 		numeroGerado = numerosContatenados;
 
-		if (comPontos)
+		if (comPontos) {
 			numeroGerado = "" + n1 + n2 + "." + n3 + n4 + n5 + "." + n6 + n7 + n8 + "-" + n9;
-		else
+		} else {
 			numeroGerado = "" + n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9;
+		}
 
 		return numeroGerado;
 	}
@@ -81,15 +82,17 @@ public class Gerar {
 
 		d1 = 11 - (d1 % 11);
 
-		if (d1 >= 10)
+		if (d1 >= 10) {
 			d1 = 0;
+		}
 
 		int d2 = d1 * 2 + n9 * 3 + n8 * 4 + n7 * 5 + n6 * 6 + n5 * 7 + n4 * 8 + n3 * 9 + n2 * 10 + n1 * 11;
 
 		d2 = 11 - (d2 % 11);
 
-		if (d2 >= 10)
+		if (d2 >= 10) {
 			d2 = 0;
+		}
 
 		return "" + n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9 + d1 + d2;
 	}
@@ -113,16 +116,18 @@ public class Gerar {
 
 		d1 = 11 - (mod(d1, 11));
 
-		if (d1 >= 10)
+		if (d1 >= 10) {
 			d1 = 0;
+		}
 
 		int d2 = d1 * 2 + n12 * 3 + n11 * 4 + n10 * 5 + n9 * 6 + n8 * 7 + n7 * 8 + n6 * 9 + n5 * 2 + n4 * 3 + n3 * 4
 				+ n2 * 5 + n1 * 6;
 
 		d2 = 11 - (mod(d2, 11));
 
-		if (d2 >= 10)
+		if (d2 >= 10) {
 			d2 = 0;
+		}
 		return "" + n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9 + n10 + n11 + n12 + d1 + d2;
 	}
 

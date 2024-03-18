@@ -10,6 +10,7 @@ public class Pedido extends Constants {
 	public String Descricao;
 	public String Url;
 	public Categoria Categoria;
+	public String Tipo;
 	public String Processo;
 	public String sAvaliado = "0";
 	public String Incremento;
@@ -51,17 +52,17 @@ public class Pedido extends Constants {
 				var desconto =100 - ((Valor[0] /avaliado) * 100);
 				Desconto = String.format("%.2f", desconto);
 			}
-		else 
+		else
 		{
-			
-			Valor[0] = avaliado;	
+
+			Valor[0] = avaliado;
 		}
-		
-			
+
+
 			System.out.println("==> Avaliacao =" + avaliado);
 			System.out.println("==> Valor =" + Valor[0]);
 			System.out.println("==> Desconto =" + Desconto);
-         
+
 
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -74,7 +75,16 @@ public class Pedido extends Constants {
 
 	}
 
+	public Pedido(String tipo ) {
+		Processo = processo;
+		Tipo =tipo;
+
+
+	}
+
+
 	public Pedido() {
+		// TODO Auto-generated constructor stub
 		Processo = processo;
 	}
 

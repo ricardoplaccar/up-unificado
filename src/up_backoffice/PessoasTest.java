@@ -42,8 +42,9 @@ public class PessoasTest {
 
 	@After
 	public void tearDown() throws Exception {
-		if (!finaliza)
+		if (!finaliza) {
 			return;
+		}
 
 		driver.close();
 		driver.quit();

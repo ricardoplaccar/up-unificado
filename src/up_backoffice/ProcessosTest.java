@@ -36,7 +36,9 @@ class ProcessosTest {
 
 	@AfterEach
 	void tearDown() throws Exception {
-		if (!finaliza) return;
+		if (!finaliza) {
+			return;
+		}
 		driver.close();
 		driver.quit();
 

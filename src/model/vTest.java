@@ -11,17 +11,33 @@ import java.util.Properties;
 public class vTest extends Constants {
 	public String Desc;
 	public String Num;
-	public Boolean Judicial;
+	public boolean Judicial;
 	public int quantidade = 0;
 	public int test_num;
 	public int tipoEnvento;
 	public int IndexCategoria = 1; // 1 =Judicial,2 = Extrajudicial
-	public Boolean isDocs = true;
+	public Boolean isDocs;
+	public Boolean Remanecente = false;
+	public Boolean OfertaAutomatica = false;
+
 
 	public String tipoEventoDesc;
 	private String[] TipoDesc = { "Padrão", "Proposta Valor", "Proposta Texto", "Proposta E-mail",
 			"Padrão sem disputa 1", "Padrão sem disputa 2", "Padrão sem disputa 3", "Padrão com disputa 1",
 			"Padrão com disputa 2", "Padrão com disputa 3" };
+
+	public void setCategoria(boolean jud) {
+
+		IndexCategoria = jud ? 1:2;
+		Judicial = jud;
+		isDocs = Judicial;
+		Remanecente = !Judicial;
+		OfertaAutomatica = !Judicial;
+
+
+	}
+
+
 
 	public vTest() {
 
@@ -29,16 +45,6 @@ public class vTest extends Constants {
 
 	}
 
-	public void setJudicial(Boolean jud) {
-		if (jud)
-			IndexCategoria = 1;
-		else
-			IndexCategoria = 2;
-// --------------------------------------
-		Judicial = jud;
-		isDocs = jud;
-
-	}
 
 	public vTest(int Value) {
 		geraTest(Value);
@@ -47,8 +53,8 @@ public class vTest extends Constants {
 
 	public void SalvaTipoEnvento() {
 		tipoEnvento++;
-		if (tipoEnvento > 9) {
-			tipoEnvento = 5; // =2  
+		if (tipoEnvento > 10) {
+			tipoEnvento = 5; // =2
 			IndexCategoria = Judicial ? 2 : 1;
 
 		}
@@ -67,6 +73,9 @@ public class vTest extends Constants {
 			try {
 				tipoEnvento = Leia("tipo");
 				IndexCategoria = Leia("IndexCategoria");
+				Judicial = IndexCategoria==1;
+				isDocs = Judicial;
+
 
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -84,6 +93,8 @@ public class vTest extends Constants {
 				ntest_num = Leia("test_num");
 				tipoEnvento = Leia("tipo");
 				IndexCategoria = Leia("IndexCategoria");
+				Judicial = IndexCategoria==1;
+				isDocs = Judicial;
 
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -102,7 +113,6 @@ public class vTest extends Constants {
 
 		tipoEventoDesc = TipoDesc[tipoEnvento - 1];
 		System.out.println(tipoEventoDesc);
-		Judicial = (IndexCategoria == 1);
 
 	}
 

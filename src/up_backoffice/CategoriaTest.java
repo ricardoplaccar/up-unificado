@@ -23,8 +23,9 @@ class CategoriaTest {
 
 	@AfterEach
 	void tearDown() throws Exception {
-		if (!finaliza)
+		if (!finaliza) {
 			return;
+		}
 		driver.close();
 		driver.quit();
 

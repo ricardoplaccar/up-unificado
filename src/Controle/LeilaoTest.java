@@ -14,12 +14,12 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
 
+import Mock.VeiculoMock;
 import model.Constants;
 import model.DataEvento;
 import model.Endereco;
 import model.Foto;
 import model.FotoTipo;
-import model.Veiculo;
 import model.vTest;
 
 class LeilaoTest extends Constants {
@@ -27,7 +27,7 @@ class LeilaoTest extends Constants {
 	@Test
 	void CadastrarNovoLeilao() throws Exception {
 		var test = new vTest();
-		var DataEv = new DataEvento(02);
+		var DataEv = new DataEvento(03);
 
 		ChromeDriver driver = IniciaLogin();
 
@@ -85,10 +85,10 @@ class LeilaoTest extends Constants {
 	@Test
 	void CadastrarNovoBemVeiculo() throws Exception {
 
-		if (num_reuso==0) Assert.fail("num_reuso = 0");
-		
-		
-		
+		if (num_reuso == 0) {
+			Assert.fail("num_reuso = 0");
+		}
+
 		var test = new vTest(num_reuso);
 
 		ChromeDriver driver = IniciaLogin();
@@ -98,7 +98,7 @@ class LeilaoTest extends Constants {
 
 	private void AddBemVeiculo(ChromeDriver driver, vTest test) throws Exception {
 
-		var vc = new Veiculo(test);
+		var vc = new VeiculoMock(test);
 		var endereco = new Endereco(test);
 
 		driver.findElement(By.partialLinkText("Bens")).click();
@@ -110,7 +110,7 @@ class LeilaoTest extends Constants {
 		Aguarde(250);
 
 		var str = MaskFloat(vc.Avaliado);
-		
+
 		driver.findElement(By.id("Holder_txt1Avaliacao")).sendKeys(str);
 
 		new Select(driver.findElement(By.id("Holder_drp1CategoriaCod"))).selectByVisibleText("VEÍCULOS");
@@ -122,7 +122,7 @@ class LeilaoTest extends Constants {
 		driver.findElement(By.id("Holder_txt1Descricao")).sendKeys(vc.Marca + " - " + vc.Modelo + " - " + vc.Nome);
 
 		driver.findElement(By.id("Holder_txt1CEP")).sendKeys(endereco.Cep);
-		Aguarde(TestControleTempo / 4);
+		Aguarde(TestControleTempo * 2);
 
 		driver.findElement(By.id("Holder_txt1Endereco")).click();
 
@@ -130,35 +130,41 @@ class LeilaoTest extends Constants {
 
 		var endTam = driver.findElement(By.id("Holder_txt1Endereco")).getText();
 
-		/*
-		 * if (100 < 100) {
-		 * driver.findElement(By.id("Holder_ctrEndereco_txt6Numero")).sendKeys("100");
-		 * 
-		 * Aguarde(TestControleTempo);
-		 * 
-		 * String s =
-		 * driver.findElement(By.id("Holder_ctrEndereco_txt6Endereco")).getAttribute(
-		 * "value"); var x = s.length(); if (x == 0) {
-		 * driver.findElement(By.id("Holder_ctrEndereco_txt6Endereco")).sendKeys(
-		 * "Qualquer");
-		 * driver.findElement(By.id("Holder_ctrEndereco_txt6Bairro")).sendKeys(
-		 * "Qualquer");
-		 * 
-		 * new Select(driver.findElement(By.id("Holder_ctrEndereco_drp6EstadoCod"))).
-		 * selectByIndex(2); Aguarde(TestControleTempo / 4); new
-		 * Select(driver.findElement(By.id("Holder_ctrEndereco_drp6CidadeCod"))).
-		 * selectByIndex(1);
-		 * 
-		 * driver.findElement(By.id("Holder_ctrEndereco_txt6Cidade")).sendKeys(
-		 * "Qualquer");
-		 * 
-		 * System.out.println("Falou endereco=>" + test.Desc);
-		 * 
-		 * }
-		 * 
-		 * driver.findElement(By.id("Holder_ctrEndereco_btn6IncluirEndereco")).click();/
-		 * / salva endereço }
-		 */
+
+		  if (endTam.length() < 50 && endTam.length()!=0) {
+
+			System.out.println("tam="+endTam.length() );
+
+		  driver.findElement(By.id("Holder_ctrEndereco_txt6Numero")).sendKeys("100");
+
+		  Aguarde(TestControleTempo);
+
+		  String s =
+		  driver.findElement(By.id("Holder_ctrEndereco_txt6Endereco")).getAttribute(
+		  "value"); var x = s.length(); if (x == 0) {
+		  driver.findElement(By.id("Holder_ctrEndereco_txt6Endereco")).sendKeys(
+		  "Qualquer");
+		  driver.findElement(By.id("Holder_ctrEndereco_txt6Bairro")).sendKeys(
+		  "Qualquer");
+
+		  new Select(driver.findElement(By.id("Holder_ctrEndereco_drp6EstadoCod"))).
+		  selectByIndex(2); Aguarde(TestControleTempo / 4); new
+		  Select(driver.findElement(By.id("Holder_ctrEndereco_drp6CidadeCod"))).
+		  selectByIndex(1);
+
+		  driver.findElement(By.id("Holder_ctrEndereco_txt6Cidade")).sendKeys(
+		  "Qualquer");
+
+		  System.out.println("Falou endereco=>" + test.Desc);
+
+		  }
+
+		  driver.findElement(By.id("Holder_ctrEndereco_btn6IncluirEndereco")).click();// salva endereço
+
+		  }
+
+			System.out.println("Passou tam="+endTam.length() );
+
 
 //		var span = driver.findElement(By.id("Holder_ctrEndereco_lblInformativo")).getAttribute("span");
 //		System.out.println("Span Texto=>" + span);
@@ -256,8 +262,9 @@ class LeilaoTest extends Constants {
 
 		var foto = getCapa(FotoTipo.capaControle, ImagemArquivoEvento[i], test.Num);
 
-		if (i != 0)
+		if (i != 0) {
 			foto = ImagemArquivoEvento[i];
+		}
 
 		new Select(driver.findElement(By.id("Holder_drp3DocumentoCategoriaCod2")))
 				.selectByVisibleText(ImagemDescricao[i]);

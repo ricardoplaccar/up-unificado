@@ -1,4 +1,4 @@
-package model;
+package Mock;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Veiculo {
+import model.Categoria;
+import model.Foto;
+import model.vTest;
+
+public class VeiculoMock {
 	public Categoria Categoria;
 	public String Nome;
 	public String Marca;
@@ -22,13 +26,13 @@ public class Veiculo {
 	public String NumMotor;
 	public ArrayList<Foto> ListFotos = new ArrayList<>();
 
-	public Veiculo(vTest test) {
-		List<Veiculo> ListaVeiculos = new ArrayList<>();
+	public VeiculoMock(vTest test) {
+		List<VeiculoMock> ListaVeiculos = new ArrayList<>();
 
 //**************** Veículo 0 ***********************************************
 
 		String Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\AUDI R8 SPYDER 2012\\";
-		ListaVeiculos.add(new Veiculo(new Categoria("Veículo", "Carro de Passeio"), "Audi",
+		ListaVeiculos.add(new VeiculoMock(new Categoria("Veículos", "Carros"), "Audi",
 				"R8 Spyder 5.2 Quattro R-tronic/S-tronic", "2012", "Flex", "Branca", "50", "87.000,00", "67.000,00",
 				"10000",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"),
@@ -40,14 +44,14 @@ public class Veiculo {
 
 		// **************** Veículo 1 ***********************************************
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Bmw 740i E38\\";
-		ListaVeiculos.add(new Veiculo(new Categoria("Veículo", "Carro de Passeio"), "Bmw", "740iA", "2000", "Flex",
+		ListaVeiculos.add(new VeiculoMock(new Categoria("Veículos", "Carros"), "Bmw", "740iA", "2000", "Flex",
 				"Prata", "60", "87.000,00", "40.000,00", "5.000,00",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"), new Foto(Caminho + "2.jpg"),	new Foto(Caminho + "3.jpg"))),
 				"AAA-0002", "15000", test));
 
 		// **************** Veículo 2 ***********************************************
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Chevette ( Tubarão ) 1976\\";
-		ListaVeiculos.add(new Veiculo(new Categoria("Veículo", "Carro de Passeio"), "Chevrolet",
+		ListaVeiculos.add(new VeiculoMock(new Categoria("Veículos", "Carros"), "Chevrolet",
 				"Chevette L / SL / SL/e / DL / SE 1.6", "1993", "Gasolina", "Prata", "200", "60.000,00", "29.000,00",
 				"1000",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"),
@@ -59,7 +63,7 @@ public class Veiculo {
 
 		// **************** Veículo 3 ***********************************************
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Fiat Argo\\";
-		ListaVeiculos.add(new Veiculo(new Categoria("Veículo", "Carro de Passeio"), "Fiat",
+		ListaVeiculos.add(new VeiculoMock(new Categoria("Veículos", "Carros"), "Fiat",
 				"AR DRIVE S-DESIGN 1.3 8V Flex", "2022", "Flex", "Prata", "100", "115.000,00", "87.000,00", "1.000,00",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "9.jpg"), new Foto(Caminho + "8.jpg"),
 						new Foto(Caminho + "7.jpg"), new Foto(Caminho + "4.jpg"), new Foto(Caminho + "3.jpg"),
@@ -69,7 +73,7 @@ public class Veiculo {
 
 		// **************** Veículo 4 ***********************************************
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Fusca 1966\\";
-		ListaVeiculos.add(new Veiculo(new Categoria("Veículo", "Carro de Passeio"), "Volkswagen - VW", "Fusca", "1985",
+		ListaVeiculos.add(new VeiculoMock(new Categoria("Veículos", "Carros"), "Volkswagen - VW", "Fusca", "1985",
 				"Flex", "Vermelha", "500", "50.000,00", "20.000,00", "1.500,00",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"), new Foto(Caminho + "2.jpg"),
 						new Foto(Caminho + "3.jpg"), new Foto(Caminho + "4.jpg"),
@@ -79,7 +83,7 @@ public class Veiculo {
 
 		// **************** Veículo 5 ***********************************************
 		Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Veiculos\\Honda Civic\\";
-		ListaVeiculos.add(new Veiculo(new Categoria("Veículo", "Carro de Passeio"), "Honda",
+		ListaVeiculos.add(new VeiculoMock(new Categoria("Veículos", "Carros"), "Honda",
 				"Civic Coupe Si 2.4 16V 206cv Mec. 2p", "2015", "Flex", "Cinza Claro", "47", "280.000,00", "140.000,00",
 				"5.000,00",
 				new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"),
@@ -114,8 +118,9 @@ public class Veiculo {
 			this.ListFotos = vc.ListFotos;
 
 			LoteVeiculo++;
-			if (LoteVeiculo >= LoteVeiculoMax)
+			if (LoteVeiculo >= LoteVeiculoMax) {
 				LoteVeiculo = 0;
+			}
 			test.Gravar("LoteVeiculo", LoteVeiculo);
 
 		} catch (FileNotFoundException e) {
@@ -128,7 +133,7 @@ public class Veiculo {
 
 	}
 
-	private Veiculo(Categoria categoria, String marca, String modelo, String ano, String combustivel, String cor,
+	private VeiculoMock(Categoria categoria, String marca, String modelo, String ano, String combustivel, String cor,
 			String km, String avaliado, String lanceinicial, String incremento, ArrayList<Foto> fotos, String placa,
 			String nummotor, vTest nnum) {
 		this.Categoria = categoria;
@@ -150,7 +155,7 @@ public class Veiculo {
 
 	@Override
 	public String toString() {
-		return "Veiculo [Marca=" + Marca + ", Modelo=" + Modelo + ", Ano=" + Ano + ", Combustivel=" + Combustivel
+		return "VeiculoMock [Marca=" + Marca + ", Modelo=" + Modelo + ", Ano=" + Ano + ", Combustivel=" + Combustivel
 				+ ", Cor=" + Cor + ", KM=" + KM + ", Valor=" + Avaliado+ ", ListFotos=" + ListFotos + "]";
 	}
 

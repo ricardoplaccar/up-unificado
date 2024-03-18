@@ -7,6 +7,8 @@ import util.Gerar;
 
 public class DataEvento {
 
+
+
 	public String HoraExibir;
 	public String HoraFimExibir;
 	public String InicioDisputaReal;
@@ -19,19 +21,24 @@ public class DataEvento {
 	public String TerceiraDataFake;
 	public String SegundaData;
 	public String TerceiraData;
-	private int minutoleilaoRealizar = 120;// 122;
+
+	private final int seg =4;
+	private final int ter=3;
+	private final int qua=2;
+	private final int qui=1;
+	private final int sex=0;
+
+	private int minutoleilaoRealizar = 3600*10; // 122;(6 horas)
 	private int diasRealizar = 0;
 	private int diasFim = 0;
 	private int minutoleilaoEncerrar = 0;
 	private int SegundaDataMinuto = 5;
 	private int TerceiraDataMinuto = 5;
 	private int minutofake = 180;
-	public boolean fake = minutofake <10 || diasRealizar < 1;
-	
-	
-
+	public boolean fake = minutoleilaoRealizar < minutofake && diasRealizar <= 1;
 	private int Segundodia = 0;
 	private int Terceirodia = 0;
+
 
 	public DataEvento(int QtdEventos, char c) {
 
@@ -49,15 +56,15 @@ public class DataEvento {
 				minutoleilaoRealizar + minutoleilaoEncerrar + SegundaDataMinuto);
 		TerceiraData = GetAddHora(diasRealizar + diasFim + Terceirodia,
 				minutoleilaoRealizar + minutoleilaoEncerrar + SegundaDataMinuto + TerceiraDataMinuto);
-		
-		//--------------------------------------------------------------------------------------------------------------------------------------	
+
+		//--------------------------------------------------------------------------------------------------------------------------------------
 			InicioDisputaFake = GetAddHora(diasRealizar, minutofake);
 		SegundaDataFake = GetAddHora(diasRealizar + diasFim + Segundodia,
 				minutoleilaoRealizar + minutoleilaoEncerrar + SegundaDataMinuto + minutofake);
 		TerceiraDataFake = GetAddHora(diasRealizar + diasFim + Segundodia + Terceirodia,
 				minutoleilaoRealizar + minutoleilaoEncerrar + SegundaDataMinuto + minutofake + TerceiraDataMinuto);
-		//--------------------------------------------------------------------------------------------------------------------------------------	
-	
+		//--------------------------------------------------------------------------------------------------------------------------------------
+
 	}
 
 	public DataEvento(int mes) {

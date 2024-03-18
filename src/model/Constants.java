@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.BasicStroke;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -13,8 +12,8 @@ import java.awt.font.GlyphVector;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.nio.file.*;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -24,8 +23,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
-
-import util.Gerar;
 
 public abstract class Constants {
 	protected static String User = "";
@@ -38,11 +35,11 @@ public abstract class Constants {
 	protected int loteImoveisQtd = 1;
 	protected int loteVeiculoQtd = 1;
 	protected int loteGeralQtd = 1;
-	protected int num_reuso = 0;
-	private final String versao = "  1.6.86.5";
+	protected int num_reuso =0;
+	private final String versao = "v1.6.94.5";
 
 	protected final String url_site_controle = "https://controleh.hastavip.com.br/Login.aspx";
-	
+
 	protected final String[] DocumentoArquivoEvento = {
 			"D:\\ricsistemas\\Documents\\Placar\\Documentos.fake\\Edital.pdf",
 			"D:\\ricsistemas\\Documents\\Placar\\Documentos.fake\\Matricula.pdf",
@@ -241,7 +238,7 @@ public abstract class Constants {
 
 		var element = driver.findElement(By.id(campoid));
 		element.click();
-		Gerar.Aguarde(1000);
+		Aguarde(1000);
 
 		var tam = valor.length() + 1;
 		var index = 1;
@@ -255,7 +252,7 @@ public abstract class Constants {
 			}
 			este.sendKeys(parte).build().perform();
 		}
-		Gerar.Aguarde(1000);
+		Aguarde(1000);
 	}
 
 }

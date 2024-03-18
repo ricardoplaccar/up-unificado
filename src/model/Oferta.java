@@ -9,10 +9,10 @@ public class Oferta {
 
 	public int getIndexOferta() {
 		return IndexOferta;
-				
-		
+
+
 	}
-	
+
 	public Oferta(int Oferta) {
 			IndexOferta = Oferta;
 			Padrao = (IndexOferta == 1);

@@ -53,8 +53,9 @@ public class Comitente {
 			UrlFinaceira = urls[Comitente];
 			Comitente++;
 			IndexComitente = Comitente;
-			if (Comitente >= ComitenteMax)
+			if (Comitente >= ComitenteMax) {
 				Comitente = 0;
+			}
 			test.Gravar("Comitente", Comitente);
 
 		} catch (IOException e) {

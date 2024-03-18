@@ -26,8 +26,9 @@ public class Banner {
 			Imagem = Caminho + imagens[Banner];
 			ImagemCelular = CaminhoCelular + imagensCelular[Banner];
 			Banner++;
-			if (Banner >= BannerMax)
+			if (Banner >= BannerMax) {
 				Banner = 0;
+			}
 			test.Gravar("Banner", Banner);
 
 		} catch (FileNotFoundException e) {

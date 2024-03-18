@@ -7,9 +7,10 @@ public class Categoria {
 
 	public String Categoria;
 	public String SubCategoria;
+	public String Segmento;
 
-	String[] scategoria = { "Veículo", "Imóvel", "Diversos" };
-	String[] subveiculo = { "Carro de Passeio", "Caminhão", "Motocicleta" };
+	String[] scategoria = { "Veículos", "Imóvel", "Diversos" };
+	String[] subveiculo = { "Carros", "Maquinario", "Motos" };
 	String[] subImovel = { "Imóvel Comercial", "Apartamento", "Prédio", "Sala Comercial", "Casa" };
 	String[] subGeral = { "Diversos", "Eletrônicos", "Informática" };
 
@@ -19,6 +20,7 @@ public class Categoria {
 	public Categoria(String categoria, String Sub) {
 		Categoria = categoria;
 		SubCategoria = Sub;
+		Segmento = categoria;
 	}
 
 	public Categoria(vTest test, ProdutoTipo tipo) {
@@ -28,8 +30,9 @@ public class Categoria {
 			int ncategoraMax = scategoria.length;
 			Categoria = scategoria[ncategoria];
 			ncategoria++;
-			if (ncategoria >= ncategoraMax)
+			if (ncategoria >= ncategoraMax) {
 				ncategoria = 0;
+			}
 			test.Gravar("Categoria", ncategoria);
 			if (tipo == ProdutoTipo.Imovel) {
 
@@ -37,8 +40,9 @@ public class Categoria {
 				int SubMax = subImovel.length;
 				SubCategoria = subImovel[nSubIm];
 				nSubIm++;
-				if (nSubIm >= SubMax)
+				if (nSubIm >= SubMax) {
 					nSubIm = 0;
+				}
 				test.Gravar("SubImovel", nSubIm);
 
 			} else
@@ -49,8 +53,9 @@ public class Categoria {
 					int SubMax = subveiculo.length;
 					SubCategoria = subveiculo[nSubVc];
 					nSubVc++;
-					if (nSubVc >= SubMax)
+					if (nSubVc >= SubMax) {
 						nSubVc = 0;
+					}
 					test.Gravar("SubVeiculo", nSubVc);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -81,8 +86,9 @@ public class Categoria {
 				int SubMax = subImovel.length;
 				SubCategoria = subImovel[nSubIm];
 				nSubIm++;
-				if (nSubIm >= SubMax)
+				if (nSubIm >= SubMax) {
 					nSubIm = 0;
+				}
 				test.Gravar("SubImovel", nSubIm);
 
 			} catch (FileNotFoundException e) {
@@ -100,8 +106,9 @@ public class Categoria {
 				int SubMax = subveiculo.length;
 				SubCategoria = subveiculo[nSubVc];
 				nSubVc++;
-				if (nSubVc >= SubMax)
+				if (nSubVc >= SubMax) {
 					nSubVc = 0;
+				}
 				test.Gravar("SubVeiculo", nSubVc);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
