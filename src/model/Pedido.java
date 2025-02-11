@@ -10,6 +10,7 @@ public class Pedido extends Constants {
 	public String Descricao;
 	public String Url;
 	public Categoria Categoria;
+	public int Num;
 	public String Tipo;
 	public String Processo;
 	public String sAvaliado = "0";
@@ -76,7 +77,7 @@ public class Pedido extends Constants {
 	}
 
 	public Pedido(String tipo ) {
-		Processo = processo;
+	//	Processo = processo;
 		Tipo =tipo;
 
 
@@ -85,7 +86,7 @@ public class Pedido extends Constants {
 
 	public Pedido() {
 		// TODO Auto-generated constructor stub
-		Processo = processo;
+	///	Processo = processo;
 	}
 
 	public String GetValor(int i) {

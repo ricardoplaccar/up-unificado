@@ -11,35 +11,58 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.WheelInput;
 
 public abstract class Constants {
+	protected final String urlHasta = "https://controleh.hastavip.com.br/default.aspx";
+	protected final String urlVip = "https://centralh.leilaovip.com.br/Default.aspx";
+	protected final String url_site_controle = "https://controleh.hastavip.com.br/Login.aspx";
+	protected final String url_controle_barramento = "https://naveh.vipleiloes.com.br/vip/estoque?menu=1";
+
+	protected final String urlProxy = "https://app-identitymanagement-hom.azurewebsites.net/?returnUrl=controle-blazor-vip-hom.vipleiloes.com.br/login/proxy/entrar";
+
 	protected static String User = "";
-	protected static String Senha = "";
+	protected static String senhaSite = "";
+	protected static String senhaBackOffice = "";
 	protected static String Url_site = "";
+	protected static String Url_backOffice;
 	protected static int tipoTest = 1; // 0 =Local 1=homolog
-	protected static String processo;
+//	protected static String processo;
 	protected static String localTest = "";
 	protected static int TestControleTempo = 0;
-	protected int loteImoveisQtd = 1;
+	protected int EventoQtd = 3;
+	protected int loteImoveisQtd = 3;
+
 	protected int loteVeiculoQtd = 1;
 	protected int loteGeralQtd = 1;
-	protected int num_reuso =0;
+	protected int num_reuso = 0;
 	private final String versao = "v1.6.94.5";
-
-	protected final String url_site_controle = "https://controleh.hastavip.com.br/Login.aspx";
-
+	protected String localLeiloes = "D:\\ricsistemas\\Documents\\Placar\\up\\java\\workspace\\upOnLine\\homolog\\leiloes\\TST%s.txt";
 	protected final String[] DocumentoArquivoEvento = {
 			"D:\\ricsistemas\\Documents\\Placar\\Documentos.fake\\Edital.pdf",
 			"D:\\ricsistemas\\Documents\\Placar\\Documentos.fake\\Matricula.pdf",
@@ -58,29 +81,98 @@ public abstract class Constants {
 			"D:\\ricsistemas\\Documents\\Placar\\Documentos.fake\\Matricula.pdf",
 			"D:\\ricsistemas\\Documents\\Placar\\Documentos.fake\\condicoes.pdf" };
 
+	protected int GetLoteImoveisQtd(int IndexQtdEventos) {
+
+		if (IndexQtdEventos == 2) {
+			loteImoveisQtd = 2;
+		}
+		if (IndexQtdEventos == 3) {
+			loteImoveisQtd = 3;
+		}
+		return loteImoveisQtd;
+
+	}
+
 	public Constants() {
 		if (tipoTest == 1) {
 
-			Url_site = "https://hom-backoffice.leilaovip.com.br/conta/entrar?ReturnUrl=%2F";
+			// Url_site =
+			// "https://hom-backoffice.leilaovip.com.br/conta/entrar?ReturnUrl=%2F";
+	//		Url_site2 = "https://up-leilaovip-backoffice-hom.azurewebsites.net/conta/entrar?ReturnUrl=%2F";
+			Url_backOffice ="https://hom-backoffice.vipleiloes.com.br/conta/entrar?ReturnUrl=%2F";
 			User = "ricardo.deoliveira@placcar.com.br";
-			Senha = "Ra870312";
-			processo = "0001572-21.2018.5.22.0002";// "0032949-14.2023.8.19.251";
+			// Senha = "vip12345";
+			senhaSite = "Rao@870312";
+			senhaBackOffice = "vip12345";
+			// processo = "0001572-21.2018.5.22.0002";// "0032949-14.2023.8.19.251";
 			localTest = "homolog";
-			TestControleTempo = 1600;
+			TestControleTempo = 1000; // old = 1600
 
 		} else {
 			Url_site = "https://localhost:1476/conta/entrar?ReturnUrl=%2F";
 			User = "Admin";
-			Senha = "Up123456";
-			processo = "0032949-14.2023.8.19.140";
+			senhaBackOffice = "Up123456";
+			// processo = "0032949-14.2023.8.19.140";
 			localTest = "local";
-			TestControleTempo = 1000;
+			TestControleTempo = 1600;
+			/*
+			 * backoffice: https://hom-backoffice.leilaovip.com.br/ usuário:
+			 * LeilaoEdgeTest-admin@vipleiloes.com.br senha: Vip123456
+			 */
 
 		}
 
 	}
 
-	protected void Aguarde(long tempo) {
+	
+	protected static boolean ValidaLogin( WebDriver  driver, String urlHasta) {
+		var achei =false;
+		System.out.println("Valida Login.");
+		var max = 13;
+		for (int x = 0; x < max; x++) {
+			var sUrl = driver.getCurrentUrl();
+			Aguarde(1000);
+			System.out.print(".");
+		   achei = sUrl.contains(urlHasta);
+		   if (achei) x=max;
+		   
+		}
+		return achei;
+
+	}	
+	
+	
+	
+	protected void AguardeUrl(ChromeDriver driver, String cUrl) {
+		var achei = false;
+		var fim = 20000;
+		System.out.print("Aguardando:");
+		while (!achei) {
+
+			var sUrl = driver.getCurrentUrl();
+			Aguarde(500);
+			achei = sUrl.contains(cUrl);
+			if (achei) {
+				System.out.println("");
+				System.out.println("=>Achei..");
+				System.out.println("=>ciclos:" + fim);
+			}
+
+			fim--;
+			if (fim < 0) {
+				System.out.println("=>>Tempo esgotado..");
+				achei = true;
+			}
+			System.out.print(".");
+			if (fim == 1000)
+				System.out.println("Prox.");
+
+		}
+		System.out.println("Saindo do loop..");
+
+	}
+
+	protected static void Aguarde(long tempo) {
 		try {
 			Thread.sleep(tempo);
 		} catch (InterruptedException e) {
@@ -124,7 +216,7 @@ public abstract class Constants {
 	}
 
 	protected String getBanner(FotoTipo fototipo) {
-		String arquivo = "D:\\ricsistemas\\Documents\\Placar\\fotos\\banner\\banner_diversos.jpg";
+		String arquivo = "D:\\ricsistemas\\Documents\\Placar\\fotos\\banner\\Banner_diversos3.jpg";
 
 		if (fototipo == FotoTipo.capaImovel) {
 			arquivo = "D:\\ricsistemas\\Documents\\Placar\\fotos\\banner\\banner_imovel.png";
@@ -162,6 +254,7 @@ public abstract class Constants {
 		BasicStroke stroke = new BasicStroke(2f);
 		String Aquiv = null;
 		int tam = 100;
+
 		if (fototipo == FotoTipo.capaVeiculo) {
 			Aquiv = Caminho + "capa-leilao-vazio-carro.jpg";
 		}
@@ -172,6 +265,15 @@ public abstract class Constants {
 			Aquiv = Caminho + "capa-leilao-diversos.jpg";
 		} else if (fototipo == FotoTipo.capaControle) {
 			Aquiv = Caminho + "capa-leilao-controle.jpg";
+		} else if (fototipo == FotoTipo.capaImovelPropostaTexto) {
+			Aquiv = Caminho + "capa-leilao-imovelPropostaTexto.png";
+
+		} else if (fototipo == FotoTipo.capaImovelPropostaValor) {
+			Aquiv = Caminho + "capa-leilao-imovelPropostaValor.png";
+
+		} else if (fototipo == FotoTipo.capaImovelPropostaEmail) {
+			Aquiv = Caminho + "capa-leilao-imovelPropostaEmail.png";
+
 		} else
 
 		if (fototipo == FotoTipo.Veiculo) {
@@ -227,7 +329,8 @@ public abstract class Constants {
 		g.draw(shape);
 		g.dispose();
 
-		String arquivo = Caminho + "~TempFoto.png";
+		String arquivo = Caminho + "leiloes\\" + num + ".png";
+
 		File file = new File(arquivo);
 		ImageIO.write(textImage, "png", file);
 		// Desktop.getDesktop().open(file);
@@ -246,13 +349,214 @@ public abstract class Constants {
 			var este = new Actions(driver);
 			var parte = valor.substring(x, index);
 			index++;
-			if (x == 8) {
-				new Actions(driver).keyDown(Keys.ARROW_RIGHT).perform();
+	//		if (x == 8) {
+		//		new Actions(driver).keyDown(Keys.ARROW_RIGHT).perform();
 
-			}
+		//	}
+			
+			
 			este.sendKeys(parte).build().perform();
 		}
 		Aguarde(1000);
+	}
+
+	protected void PreencheDataExibicao(WebDriver driver, String campoid, String valor) {
+		
+		var element = driver.findElement(By.id(campoid));
+		element.click();
+		Aguarde(1000);
+		
+		var tam = valor.length() + 1;
+		var index = 1;
+		for (int x = 0; x < tam - 1; x++) {
+			var este = new Actions(driver);
+			var parte = valor.substring(x, index);
+			index++;
+					if (x == 8) {
+					new Actions(driver).keyDown(Keys.ARROW_RIGHT).perform();
+			
+				}
+			
+			
+			este.sendKeys(parte).build().perform();
+		}
+		Aguarde(1000);
+	}
+	
+	protected void AguardeEdge(WebDriver driver, String cUrl) {
+		var achei = false;
+		var fim = 1000;
+
+		System.out.print("Aguardando:");
+		while (!achei) {
+
+			var sUrl = driver.getCurrentUrl();
+			Aguarde(250);
+			achei = sUrl.contains(cUrl);
+			if (achei) {
+				System.out.println("");
+				System.out.println("=>Achei..");
+				System.out.println("=>Ciclos: " + fim);
+			}
+
+			fim--;
+			if (fim < 0) {
+				System.out.println("=>>Tempo esgotado..");
+				achei = true;
+			}
+			System.out.print(".");
+		}
+		System.out.println("Saindo do loop..");
+
+	}
+
+	protected void ScrollUp(WebDriver driver, String id) {
+		// TODO Auto-generated method stub
+		WebElement iframe = driver.findElement(By.id(id));
+		WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromElement(iframe);
+		new Actions(driver).scrollFromOrigin(scrollOrigin, 0, -600).perform();
+
+	}
+
+	protected void ScrollDown(WebDriver driver, String id) {
+		// TODO Auto-generated method stub
+		WebElement iframe = driver.findElement(By.id(id));
+		WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromElement(iframe);
+		new Actions(driver).scrollFromOrigin(scrollOrigin, 0, 400).perform();
+
+	}
+
+	protected void InserirFotoLeilao(WebDriver driver, FotoTipo fototipo, String num) throws Exception {
+
+		var foto = getCapa(fototipo, "", num);
+		driver.findElement(By.id("filestyle-2")).sendKeys(foto);
+		Aguarde(TestControleTempo * 4);
+		driver.findElement(By.id("Holder_btn3DocumentoEnvia2")).click();
+		Aguarde(TestControleTempo * 2);
+
+		System.out.print(foto);
+	}
+
+	protected String MaskFloat(String Value) {
+
+		try {
+			var avaliado = NumberFormat.getNumberInstance().parse(Value).doubleValue();
+
+			DecimalFormat df = new DecimalFormat("####.##");
+			return df.format(avaliado);
+
+		} catch (
+
+		ParseException e) {
+			e.printStackTrace();
+			return "0";
+		}
+
+	}
+
+	public ArrayList<String> LeiaListaCodigoProduto(String leilao) {
+
+		var lista = new ArrayList<String>();
+		
+
+		String filePath = String.format(localLeiloes, leilao);
+		
+		System.out.println("=>"+filePath);
+		
+		
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				lista.add(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return lista;
+
+	}
+
+	protected void SalvaListaBens(String leilao, ArrayList<String> ListaBens) {
+
+		String filePath = String.format(localLeiloes, leilao);
+
+		try {
+			File file = new File(filePath);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter fw = new FileWriter(file, true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bw);
+			// This will add a new line to the file content
+			for (String str : ListaBens) {
+				System.out.println("Item:" + str);
+				pw.println(str);
+			}
+
+			pw.close();
+			System.out.println("Os Códigos dos Bens foram salvos com suscesso!");
+
+		} catch (IOException ioe) {
+			System.out.println("Exception occurred:");
+			ioe.printStackTrace();
+		}
+	}
+	public void SalvaListaCodigoProduto(String leilao, ArrayList<String> ListaCodigoProdutos) {
+		
+		String filePath = String.format(localLeiloes, leilao);
+		
+		try {
+			File file = new File(filePath);
+			file.createNewFile();
+			FileWriter fw = new FileWriter(file, false);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bw);
+			// This will add a new line to the file content
+			for (String str : ListaCodigoProdutos) {
+				System.out.println("Item:" + str);
+				pw.println(str);
+			}
+			
+			pw.close();
+			System.out.println("Os Códigos dos Bens foram salvos com suscesso!");
+			
+		} catch (IOException ioe) {
+			System.out.println("Exception occurred:");
+			ioe.printStackTrace();
+		}
+	}
+	
+
+	protected void SalvaBens(String leilao, String Bens) {
+
+		String filePath = String.format(localLeiloes, leilao);
+
+		try {
+			File file = new File(filePath);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter fw = new FileWriter(file, true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bw);
+			// This will add a new line to the file content
+			System.out.println("Item:" + Bens);
+			pw.println(Bens);
+			pw.close();
+			System.out.println("Os Códigos dos Bens foram salvos com suscesso!");
+
+		} catch (IOException ioe) {
+			System.out.println("Exception occurred:");
+			ioe.printStackTrace();
+		}
+	}
+
+	protected String SeparaHora(String horaExibir) {
+		// TODO Auto-generated method stub
+		return horaExibir.substring(8);
+
 	}
 
 }

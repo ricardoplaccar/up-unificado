@@ -11,8 +11,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import mock.EnderecoMock;
 import model.Comitente;
-import model.Endereco;
 import model.Pessoa;
 import model.Pessoa.Tipo;
 import model.vTest;
@@ -269,7 +269,7 @@ public class PessoasTest {
 
 	private void CadastraEndereco(WebDriver driver, Pessoa pes) {
 
-		var ender = new Endereco(test);
+		var ender = new EnderecoMock(test);
 
 
 		driver.findElement(By.id("Pessoa_Endereco_Cep")).sendKeys(ender.Cep);

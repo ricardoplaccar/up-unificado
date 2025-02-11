@@ -1,4 +1,4 @@
-package Mock;
+package mock;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class GeralMock {
 	public GeralMock(vTest test) {
 		List<GeralMock> ListaGeral = new ArrayList<>();
 
-		String Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\GeralMock\\Geral1\\";
+		String Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Geral\\Geral1\\";
 		//*****************************************************************************************************************
 
 		ListaGeral.add(new GeralMock(new Categoria("Diversos", "Diversos"), "BENS DIVERSOS",
@@ -34,7 +34,7 @@ public class GeralMock {
 						new Foto(Caminho + "6.jpg"), new Foto(Caminho + "7.jpg"), new Foto(Caminho + "8.jpg"),
 						new Foto(Caminho + "9.jpg"), new Foto(Caminho + "10.jpg"))),test));
 	//*****************************************************************************************************************
-		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\GeralMock\\Geral2\\";
+		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Geral\\Geral2\\";
 		//*****************************************************************************************************************
 
 		ListaGeral.add(new GeralMock(new Categoria("Diversos", "Energia Solar"), "KITS PARA AQUECIMENTO SOLAR",
@@ -44,7 +44,7 @@ public class GeralMock {
 	//*****************************************************************************************************************
 
 
-		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\GeralMock\\Geral3\\";
+		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Geral\\Geral3\\";
 		//*****************************************************************************************************************
 		 ListaGeral.add(new GeralMock(new Categoria("Diversos", "Diversos"), "MONITOR, FRIGOBAR E HOMETHEATER",
 					"1.100,00", "1.100,00", "100,00",
@@ -55,7 +55,7 @@ public class GeralMock {
 
 
 	//*****************************************************************************************************************
-		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\GeralMock\\Geral4\\";
+		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Geral\\Geral4\\";
 		//*****************************************************************************************************************
 
 		ListaGeral.add(new GeralMock(new Categoria("Diversos", "Diversos"), "PICADOR DE MADEIRA",
@@ -65,7 +65,7 @@ public class GeralMock {
 	//*****************************************************************************************************************
 
 		//*****************************************************************************************************************
-		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\GeralMock\\Geral5\\";
+		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Geral\\Geral5\\";
 		//*****************************************************************************************************************
 
 		ListaGeral.add(new GeralMock(new Categoria("Diversos", "Diversos"), "MÁQUINA GRÁFICA",
@@ -74,7 +74,7 @@ public class GeralMock {
 						new Foto(Caminho + "3.jpg"))),test));
 	//*****************************************************************************************************************
 
-		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\GeralMock\\Consorcio\\";
+		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Geral\\Consorcio\\";
 		//*****************************************************************************************************************
 		ListaGeral.add(new GeralMock(new Categoria("Diversos", "Consórcio"), "Cartas Contempladas de Consórcio",
 				"14.600,00", "14.600,00", "500,00",
@@ -82,7 +82,7 @@ public class GeralMock {
 						new Foto(Caminho + "3.jpg"))),test));
 
 	//*****************************************************************************************************************
-		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\GeralMock\\Vestuario\\";
+		 Caminho = "D:\\ricsistemas\\Documents\\Placar\\fotos\\Geral\\Vestuario\\";
 	//*****************************************************************************************************************
 		ListaGeral.add(new GeralMock(new Categoria("Diversos", "Vestuário"), "Deneuve assinadas por Yves Saint Laurent",
 					"15.000,00", "10.600,00", "500,00",
@@ -112,8 +112,6 @@ public class GeralMock {
 					"1.5000,00", "1.600,00", "200,00",
 					new ArrayList<>(Arrays.asList(new Foto(Caminho + "1.jpg"),new Foto(Caminho + "2.jpg"))),test));
 	//*****************************************************************************************************************
-
-
 
 		try {
 

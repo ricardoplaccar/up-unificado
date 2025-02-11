@@ -1,12 +1,7 @@
 package model;
 
 public enum FotoTipo {
-     capaImovel,
-	 capaVeiculo,
-	 capaGeral,
-	 capaControle,
-	 Imovel,
-	 Veiculo,
-	 Geral,
-	 Controle
+	Imovel, Veiculo, Geral, Controle, capaImovel, capaVeiculo, capaGeral, capaControle, capaImovelPropostaTexto,
+	capaImovelPropostaValor, capaImovelPropostaEmail
+
 }

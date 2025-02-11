@@ -1,21 +1,16 @@
 package dao;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
-
-
-public class MeuDb {
-
+public class MeuDB {
 	public static Connection criaConexao(boolean Autocommit) {
 		Connection conexao = null;
 		String myDriver = "com.mysql.cj.jdbc.Driver";
-		String myUrl = "jdbc:mysql://localhost/shop?serverTimezone=UTC&useSSL=false&requireSSL=false";
-		String usuario = "app_user";
-		String senha = "adm102030";
+		String myUrl = "jdbc:mysql://localhost/cardapio?serverTimezone=UTC&useSSL=false&requireSSL=false";
+		String usuario = "root";
+		String senha = "Adm102030";
 
 		try {
 			Class.forName(myDriver);
@@ -39,8 +34,4 @@ public class MeuDb {
 
 	}
 
-
-
-	}
-
-
+}

@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import model.Constants;
+import model.MyChromeOptions;
 
 public class LoginTest extends Constants{
 
@@ -16,19 +17,33 @@ public class LoginTest extends Constants{
 
 
 
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("start-maximized");
-		// Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe /T");
-		// System.setProperty("webdriver.chrome.driver",
-		// "c:\\Webdriver\\chromedriver.exe");
-		WebDriver driver = new ChromeDriver(options);
+		var options  =  new MyChromeOptions();
+
+		
+		WebDriver driver = new ChromeDriver(options.getOptions());
 		// driver.manage().timeouts().implicitlyWait(20, null);
 		driver.manage().deleteAllCookies();
-		driver.get(Url_site);
+		driver.get(Url_backOffice);
+		
+		try {
+			if (!ValidaLogin(driver, Url_backOffice))
+
+			{
+
+				return driver;
+
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
 		driver.findElement(By.id("Login_Login")).clear();
 		driver.findElement(By.id("Login_Login")).sendKeys(User);
 		driver.findElement(By.id("Login_Senha")).clear();
-		driver.findElement(By.id("Login_Senha")).sendKeys(Senha);
+		driver.findElement(By.id("Login_Senha")).sendKeys(senhaBackOffice);
 		driver.findElement(By.cssSelector("i.fa-solid.fa-right-to-bracket")).click();
 		return driver;
 
@@ -44,4 +59,5 @@ public class LoginTest extends Constants{
 	 *
 	 * return null; }
 	 */
+
 }

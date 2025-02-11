@@ -5,9 +5,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
-import Mock.ImovelMock;
-import Mock.VeiculoMock;
-import model.Endereco;
+import mock.EnderecoMock;
+import mock.ImovelMock;
+import mock.VeiculoMock;
 import model.Foto;
 import model.vTest;
 import util.Gerar;
@@ -40,8 +40,10 @@ class ProdutosTest {
 	@Test
 	void Cadastrar_Veiculo_Deve_Retornar_sucesso() {
 
-		var vc = new VeiculoMock(test);
+		var vmock = new VeiculoMock(test);
 
+		var vc = vmock.getVeiculo();
+		
 		WebDriver driver = LoginTest.IniciaLogin();
 
 		driver.findElement(By.linkText("Produtos")).click();
@@ -88,7 +90,7 @@ class ProdutosTest {
 		driver.findElement(By.id("Produto_Quilometragem")).sendKeys(vc.KM);
 		Gerar.Aguarde(controleTempo);
 
-		var ender = new Endereco(test); //  gg
+		var ender = new EnderecoMock(test); //  gg
 
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(ender.Cep);
 
@@ -129,7 +131,7 @@ class ProdutosTest {
 		new Select(driver.findElement(By.id("Produto_SubCategoriaId"))).selectByVisibleText(im.Categoria.SubCategoria);
 		Gerar.Aguarde(controleTempo);
 
-		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(im.LancInicial);
+		driver.findElement(By.id("Produto_ValorPedido")).sendKeys(im.LanceInicial);
 		driver.findElement(By.id("Produto_ValorAvaliacao")).sendKeys(im.Avaliado);
 
 		new Select(driver.findElement(By.id("Produto_ComitenteId"))).selectByIndex(1);
@@ -140,7 +142,7 @@ class ProdutosTest {
 		new Select(driver.findElement(By.id("Produto_ProcessoJuridicoId"))).selectByVisibleText("0032949-14.2023.8.19.56");
 
 		Gerar.Aguarde(controleTempo);
-	    var endereco = new Endereco(test);
+	    var endereco = new EnderecoMock(test);
 		driver.findElement(By.id("Produto_Local_Cep")).sendKeys(endereco.Cep);
 
 		driver.findElement(By.id("Produto_Local_Numero")).click();
